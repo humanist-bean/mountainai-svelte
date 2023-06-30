@@ -1,4 +1,6 @@
 <script>
+    // Source: CSS and HTML for gradient lettering by Adam Argyle
+    // https://codepen.io/argyleink/pen/OJMEpGp
     import {createEventDispatcher} from 'svelte';
 
     const dispatch = createEventDispatcher();
