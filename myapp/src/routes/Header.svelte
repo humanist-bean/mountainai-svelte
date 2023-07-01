@@ -4,21 +4,26 @@
 	import MountainLogo from './MountainLogo.svelte'
 	import logo from '$lib/images/svelte-logo.svg';
 	import github from '$lib/images/github.svg';
+	import { fade } from 'svelte/transition';
+	import {transition_start, transition_end} from '/src/routes/transitions.js';
 
 	let logo_size = 5;
 	export let results_page = false;
 </script>
 
-<header>
+<header transition:fade
+on:introend={transition_end}
+on:outrostart={transition_start}
+on:outroend={transition_end}>
 	<ul>
 		<div class="left-corner">
 			<li><a class="left-corner" href="#home">
-				<MountainLogo {logo_size} on:clicked-home-btn={() => results_page = false} />
+				<MountainLogo {logo_size} on:clicked-home-btn={() => {results_page = false; transition_start();}} />
 			</a></li>
 		</div>
 		
 		<div class="right-corner">
-			<MtnBtn on:clicked-upload-btn={() => results_page = true} />		
+			<MtnBtn on:clicked-upload-btn={() => {results_page = true; transition_start();}} />		
 		</div>
 		
 	</ul>

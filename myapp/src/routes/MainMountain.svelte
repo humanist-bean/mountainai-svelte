@@ -1,14 +1,21 @@
 <script>
-
+	import { fade } from 'svelte/transition';
+    import {transition_start, transition_end} from '/src/routes/transitions.js';
 </script>
 
-<div class="flex-container">
+<div transition:fade class="flex-container"
+on:introend={transition_end}
+on:outrostart={transition_start}
+on:outroend={transition_end}>
     <div>
-        <img class="top-mountain-image" src="/src/lib/images/north-cascades-img.webp" alt="Girl in a jacket"> 
+        <h2>
+            North Cascades            
+        </h2>
+        <img class="top-mountain-image" src="/src/lib/images/north-cascades-2.jpg" alt="North Cascades"> 
     </div>
     <div>
         <p>
-            Mount Rainier, also known as Tahoma, is a large active stratovolcano in the Cascade Range of the Pacific Northwest in the United States. The mountain is located in Mount Rainier National Park about 59 miles south-southeast of Seattle.
+            North Cascades National Park is in northern Washington State. It’s a vast wilderness of conifer-clad mountains, glaciers and lakes. The North Cascades Highway passes viewpoints and leads to trails such as the steep Thunder Creek Trail. Boats dot Ross Lake. The remote community of Stehekin lies at the northern tip of deep Lake Chelan. The park shelters grizzly bears and gray wolves, plus more than 200 bird species        
         </p>
     </div> 
 </div>

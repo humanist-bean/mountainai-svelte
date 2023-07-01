@@ -4,21 +4,25 @@
 	import MainMountain from './MainMountain.svelte';
 	import MountainList from './MountainList.svelte';
 	import './styles.css';
+	import {transition, transition_start, transition_end} from '/src/routes/transitions.js'
+
+	let transition_ready = true;
+	transition.subscribe((value) => {transition_ready = value;});
 
 	let results_page = false;
-
+	
 </script>
 
 <div class="app">
-	{#if results_page}
+	{#if (results_page && transition_ready)}
 		<Header bind:results_page />
 	{/if}
 
 	<main>
-		{#if !results_page}
+		{#if (!results_page && transition_ready)}
 			<Home bind:results_page />
 		{/if}
-		{#if results_page}
+		{#if (results_page && transition_ready)}
 			<MainMountain />
 			<MountainList />
 		{/if}
@@ -46,6 +50,8 @@
 		max-width: 64rem;
 		margin: 0 auto;
 		box-sizing: border-box;
+		justify-content: center;
+        align-items: center;
 	}
 
 	footer {
