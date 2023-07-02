@@ -1,16 +1,11 @@
 <script>
-	import Counter from './Counter.svelte';
 	import MtnBtn from './MtnBtn.svelte';
 	import MountainLogo from './MountainLogo.svelte'
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
 	import { fade } from 'svelte/transition';
 	import {transition_start, transition_end} from '/src/routes/transitions.js';
+	import {show_results_page} from '/src/routes/results_page.js';
 
-	export let results_page = false;
 	let logo_size = 11;
-	
-
 </script>
 
 <svelte:head>
@@ -34,7 +29,7 @@ on:outroend={transition_end}>
 		<!-- IMPORTANT NOTE ON 'transtion_start();': It needs to be attached to this button,
 		because if its attached to 'introstart' instead then the animations for the home page
 		transition out and main mountain transition occur simoultaneously and the transition doesn't work! -->
-		<MtnBtn on:clicked-upload-btn={()=> {results_page = true; transition_start();}}/>
+		<MtnBtn on:clicked-upload-btn={()=> {show_results_page(); transition_start();}}/>
 	</h2>
 
 </section>

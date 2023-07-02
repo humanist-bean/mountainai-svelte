@@ -1,45 +1,42 @@
 <script>
 	import Header from './Header.svelte';
-	import Home from './Home.svelte';
-	import MainMountain from './MainMountain.svelte';
-	import MountainList from './MountainList.svelte';
 	import './styles.css';
-	import {transition, transition_start, transition_end} from '/src/routes/transitions.js'
+	import {transition} from '/src/routes/transitions.js';
+	import {results_page} from '/src/routes/results_page.js';
+	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 
-	let transition_ready = true;
+	// Home Page Load and Component Svelte Transitions
+	let intro_transition_ready = false;
+	let transition_ready = false;
+	
+	onMount(() => {transition_ready = true; intro_transition_ready= true;});
 	transition.subscribe((value) => {transition_ready = value;});
+	
 
-	let results_page = false;
+	// Variable for toggling the results page components
+	let toggle_results_page = false;
+	results_page.subscribe((value) => toggle_results_page = value);
 	
 </script>
 
-<div class="app">
-	{#if (results_page && transition_ready)}
-		<Header bind:results_page />
-	{/if}
-
-	<main>
-		{#if (!results_page && transition_ready)}
-			<Home bind:results_page />
+{#if intro_transition_ready}
+	<div transition:fade class="app">
+		{#if (toggle_results_page && transition_ready)}
+			<Header />
 		{/if}
-		{#if (results_page && transition_ready)}
-			<MainMountain />
-			<MountainList />
-		{/if}
-		<slot/> <!-- Seems like slot is annoying since it has very limited functionality compared to components-->
-	</main>
 
-	<footer>
-		<p>footer</p>
-	</footer>
-</div>
+		<main>
+			<slot />
+		</main>
+
+		<footer>
+			<a href="https://humanist-bean.github.io"><p>@ Alder French 2023 </p></a>
+		</footer>
+	</div>
+{/if}
 
 <style>
-	.app {
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-	}
 
 	main {
 		flex: 1;
@@ -63,7 +60,9 @@
 	}
 
 	footer a {
+		color:azure;
 		font-weight: bold;
+		font-size:0.66em;
 	}
 
 	@media (min-width: 480px) {

@@ -15,7 +15,7 @@ on:outroend={transition_end}>
     </div>
     <div>
         <p>
-            North Cascades National Park is in northern Washington State. It’s a vast wilderness of conifer-clad mountains, glaciers and lakes. The North Cascades Highway passes viewpoints and leads to trails such as the steep Thunder Creek Trail. Boats dot Ross Lake. The remote community of Stehekin lies at the northern tip of deep Lake Chelan. The park shelters grizzly bears and gray wolves, plus more than 200 bird species        
+            North Cascades National Park is in northern Washington State. Its a vast wilderness of conifer-clad mountains, glaciers and lakes. The North Cascades Highway passes viewpoints and leads to trails such as the steep Thunder Creek Trail. Boats dot Ross Lake. The remote community of Stehekin lies at the northern tip of deep Lake Chelan. The park shelters grizzly bears and gray wolves, plus more than 200 bird species.        
         </p>
     </div> 
 </div>
@@ -46,7 +46,7 @@ on:outroend={transition_end}>
 
     .flex-container > div > p {
         font-size: 12px;
-        overflow: scroll;
+        overflow: visible;
         flex: 1;
         
     }

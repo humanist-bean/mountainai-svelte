@@ -1,14 +1,13 @@
 <script>
-	import { page } from '$app/stores';
 	import MtnBtn from './MtnBtn.svelte';
 	import MountainLogo from './MountainLogo.svelte'
-	import logo from '$lib/images/svelte-logo.svg';
-	import github from '$lib/images/github.svg';
 	import { fade } from 'svelte/transition';
 	import {transition_start, transition_end} from '/src/routes/transitions.js';
+	import {show_results_page, hide_results_page} from '/src/routes/results_page.js';
 
 	let logo_size = 5;
-	export let results_page = false;
+
+	let toggle_results_page = false;
 </script>
 
 <header transition:fade
@@ -18,12 +17,12 @@ on:outroend={transition_end}>
 	<ul>
 		<div class="left-corner">
 			<li><a class="left-corner" href="#home">
-				<MountainLogo {logo_size} on:clicked-home-btn={() => {results_page = false; transition_start();}} />
+				<MountainLogo {logo_size} on:clicked-home-btn={() => {hide_results_page(); transition_start();}} />
 			</a></li>
 		</div>
 		
 		<div class="right-corner">
-			<MtnBtn on:clicked-upload-btn={() => {results_page = true; transition_start();}} />		
+			<MtnBtn on:clicked-upload-btn={() => {show_results_page(); transition_start();}} />		
 		</div>
 		
 	</ul>
