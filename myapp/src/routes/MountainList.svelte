@@ -1,6 +1,8 @@
 <script>
-let mountains = ['Mt. Rainier', 'Mt. Thielsen', 'Diamond Peak', 'Mt. Hood', 'Mt. Jefferson']
 import { fade } from 'svelte/transition';
+
+let mountains = ['Mt. Rainier', 'Mt. Thielsen', 'Diamond Peak', 'Mt. Hood', 'Mt. Jefferson']
+
 </script>
 
 <!-- Outer div is list container, inner divs are for each list element-->

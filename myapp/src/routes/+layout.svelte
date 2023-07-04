@@ -3,7 +3,7 @@
 	import './styles.css';
 	import {transition} from '/src/routes/transitions.js';
 	import {results_page} from '/src/routes/results_page.js';
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { fade } from 'svelte/transition';
 
 	// Home Page Load and Component Svelte Transitions
@@ -11,12 +11,14 @@
 	let transition_ready = false;
 	
 	onMount(() => {transition_ready = true; intro_transition_ready= true;});
-	transition.subscribe((value) => {transition_ready = value;});
-	
+	const unsub_transition = transition.subscribe((value) => {transition_ready = value;});
 
 	// Variable for toggling the results page components
 	let toggle_results_page = false;
-	results_page.subscribe((value) => toggle_results_page = value);
+	const unsub_results = results_page.subscribe((value) => {toggle_results_page = value;});
+
+	// Unsubscribe from stores upon component destruction to avoid memory leaks
+	onDestroy(() => {unsub_transition(); unsub_results();});
 	
 </script>
 

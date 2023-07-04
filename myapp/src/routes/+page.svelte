@@ -2,16 +2,20 @@
 	import MainMountain from './MainMountain.svelte';
 	import MountainList from './MountainList.svelte';
 	import Home from './Home.svelte';
+	import {onDestroy} from 'svelte';
 	import {results_page} from '/src/routes/results_page.js';
 	import {transition} from '/src/routes/transitions.js';
 
 	// Control when the transition animation occurs to avoid component overlap
 	let transition_ready = true;
-	transition.subscribe((value) => {transition_ready = value;});
+	const unsub_transition = transition.subscribe((value) => {transition_ready = value;});
 
 	// Toggle the results page components
 	let toggle_results_page = false;
-	results_page.subscribe((value) => toggle_results_page = value);
+	const unsub_results = results_page.subscribe((value) => {toggle_results_page = value;});
+
+	// Unsubscribe from stores upon component destruction to avoid memory leaks
+	onDestroy(() => {unsub_transition(); unsub_results();});
 </script>
 
 <div class="app">
