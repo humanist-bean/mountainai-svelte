@@ -3,8 +3,8 @@
 	import MountainList from './MountainList.svelte';
 	import Home from './Home.svelte';
 	import {onDestroy} from 'svelte';
-	import {results_page} from '/src/routes/results_page.js';
-	import {transition} from '/src/routes/transitions.js';
+	import {results_page} from '$lib/js/results_page.js';
+	import {transition} from '$lib/js/transitions.js';
 
 	// Control when the transition animation occurs to avoid component overlap
 	let transition_ready = true;

@@ -1,10 +1,11 @@
 <script>
 	import Header from './Header.svelte';
 	import './styles.css';
-	import {transition} from '/src/routes/transitions.js';
-	import {results_page} from '/src/routes/results_page.js';
+	import {transition} from '$lib/js/transitions.js';
+	import {results_page} from '$lib/js/results_page.js';
 	import { onMount, onDestroy } from 'svelte';
 	import { fade } from 'svelte/transition';
+	//import {app} from '$lib/js/firebase.js';
 
 	// Home Page Load and Component Svelte Transitions
 	let intro_transition_ready = false;
@@ -29,7 +30,7 @@
 		{/if}
 
 		<main>
-			<slot />
+			<slot/>
 		</main>
 
 		<footer>

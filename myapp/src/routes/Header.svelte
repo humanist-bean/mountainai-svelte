@@ -2,8 +2,8 @@
 	import MtnBtn from './MtnBtn.svelte';
 	import MountainLogo from './MountainLogo.svelte'
 	import { fade } from 'svelte/transition';
-	import {transition_start, transition_end} from '/src/routes/transitions.js';
-	import {show_results_page, hide_results_page} from '/src/routes/results_page.js';
+	import {transition_start, transition_end} from '$lib/js/transitions.js';
+	import {show_results_page, hide_results_page} from '$lib/js/results_page.js';
 
 	let logo_size = 5;
 

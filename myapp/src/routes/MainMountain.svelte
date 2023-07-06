@@ -1,6 +1,6 @@
 <script>
 	import { fade } from 'svelte/transition';
-    import {transition_start, transition_end} from '/src/routes/transitions.js';
+    import {transition_start, transition_end} from '$lib/js/transitions.js';
 </script>
 
 <div transition:fade class="flex-container"

@@ -20,16 +20,16 @@ function clickedUploadBtn(){
 
 <style>
     .mtn-upload-btn{
-            background-color: black;
-            font-family: sans-serif;
-            border-radius: 0.7rem;
-            cursor: pointer;
-            display: flex;
-            color: white;
-            text-align: center;
-            padding: 0.66rem;
-            margin: 0.66rem;
-            text-decoration: none;
+        background-color: black;
+        font-family: sans-serif;
+        border-radius: 0.7rem;
+        cursor: pointer;
+        display: flex;
+        color: white;
+        text-align: center;
+        padding: 0.66rem;
+        margin: 0.66rem;
+        text-decoration: none;
     }
 
     .mtn-upload-btn:hover{

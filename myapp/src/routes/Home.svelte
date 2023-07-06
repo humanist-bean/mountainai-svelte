@@ -1,9 +1,10 @@
 <script>
 	import MtnBtn from './MtnBtn.svelte';
+	import Auth from './Auth.svelte';
 	import MountainLogo from './MountainLogo.svelte'
 	import { fade } from 'svelte/transition';
-	import {transition_start, transition_end} from '/src/routes/transitions.js';
-	import {show_results_page} from '/src/routes/results_page.js';
+	import {transition_start, transition_end} from '$lib/js/transitions.js';
+	import {show_results_page} from '$lib/js/results_page.js';
 
 	let logo_size = 11;
 </script>
@@ -30,6 +31,7 @@ on:outroend={transition_end}>
 		because if its attached to 'introstart' instead then the animations for the home page
 		transition out and main mountain transition occur simoultaneously and the transition doesn't work! -->
 		<MtnBtn on:clicked-upload-btn={()=> {show_results_page(); transition_start();}}/>
+		<Auth />
 	</h2>
 
 </section>
