@@ -2,15 +2,11 @@
     // Made this component with help from fireship's Firebase and Sveltekit repo
     // source: https://github.com/codediodeio/sveltefire/blob/master/src/lib/User.svelte
     import {auth} from '$lib/js/firebase.js';
-    import {onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+    import { slide } from 'svelte/transition';
+    import {onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
     import {user_store} from '$lib/js/user.js';
     import {show_header, hide_header} from '$lib/js/header.js';
 
-    
-
-
-    //let user = undefined;
-    //$:{user_store.set(user);} //should update user_store whenever user changes
 
     // Use the wrapper function so we can call signInWithPopup when button clicked instead
     // of automatically on page load
@@ -47,12 +43,19 @@
         show_header();
     }
 
+    async function signOutWrapper(auth){
+        signOut(auth).then(() => {
+            console.log("Successfully signed out.");;
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
     
     onAuthStateChanged(auth, (user) => {
     if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
         user_store.set(user);
         // ...
     } else {
@@ -62,17 +65,22 @@
     }
     }); 
 
+
+
 </script>
 
 <div data-sveltekit-preload-data="off">
     {#if ($user_store !== false)}
         <a href="/dashboard/{$user_store.uid}" >
-            <button on:click={() => clickedDashboard()} class="mtn-auth-btn" id="upload">
+            <button transition:slide on:click={() => clickedDashboard()} class="mtn-auth-btn" id="upload">
                 Dashboard
             </button>
         </a>
+        <button transition:slide on:click={() => signOutWrapper(auth)} class="mtn-auth-btn" id="upload">
+            Sign Out
+        </button>
     {:else}
-        <button on:click={() => signInWrapper()} class="mtn-auth-btn" id="upload">
+        <button transition:slide  on:click={() => signInWrapper(auth)} class="mtn-auth-btn" id="upload">
             Sign In
         </button>
     {/if}
@@ -80,6 +88,7 @@
 
 <style>
     div {
+        flex-direction: column;
         align-content: center;
         text-align: center;
         justify-content: center;
