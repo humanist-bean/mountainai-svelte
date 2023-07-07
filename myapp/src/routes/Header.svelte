@@ -16,7 +16,7 @@ on:outrostart={transition_start}
 on:outroend={transition_end}>
 	<ul>
 		<div class="left-corner">
-			<li><a class="left-corner" href="#home">
+			<li><a class="left-corner" href="/">
 				<MountainLogo {logo_size} on:clicked-home-btn={() => {hide_results_page(); transition_start();}} />
 			</a></li>
 		</div>

@@ -3,6 +3,7 @@
 	import './styles.css';
 	import {transition} from '$lib/js/transitions.js';
 	import {results_page} from '$lib/js/results_page.js';
+	import {header} from '$lib/js/header.js';
 	import { onMount, onDestroy } from 'svelte';
 	import { fade } from 'svelte/transition';
 	//import {app} from '$lib/js/firebase.js';
@@ -14,9 +15,14 @@
 	onMount(() => {transition_ready = true; intro_transition_ready= true;});
 	const unsub_transition = transition.subscribe((value) => {transition_ready = value;});
 
-	// Variable for toggling the results page components
+	// Variable for toggling the results page components with results_page store
 	let toggle_results_page = false;
 	const unsub_results = results_page.subscribe((value) => {toggle_results_page = value;});
+
+	// Variable for toggling the header component with the header store
+	let toggle_header = false;
+	$:{toggle_header = $header}
+
 
 	// Unsubscribe from stores upon component destruction to avoid memory leaks
 	onDestroy(() => {unsub_transition(); unsub_results();});
@@ -25,7 +31,7 @@
 
 {#if intro_transition_ready}
 	<div transition:fade class="app">
-		{#if (toggle_results_page && transition_ready)}
+		{#if (toggle_header && transition_ready)}
 			<Header />
 		{/if}
 
