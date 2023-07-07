@@ -1,17 +1,14 @@
 {
   "hosting": {
-    "public": "src",
+    "source": ".",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
+    "frameworksBackend": {
+      "region": "us-west1"
+    }
   },
   "emulators": {
     "hosting": {

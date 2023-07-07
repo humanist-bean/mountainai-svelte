@@ -10,7 +10,7 @@ let mountains = ['Mt. Rainier', 'Mt. Thielsen', 'Diamond Peak', 'Mt. Hood', 'Mt.
     {#each mountains as mountain}
         <div>
             <h3>{mountain}</h3>
-            <img src="src/lib/images/{mountain}.jpg" alt="">
+            <img src="/images/{mountain}.jpg" alt="">
         </div>
     {/each}
 </div>

@@ -11,7 +11,7 @@ on:outroend={transition_end}>
         <h2>
             North Cascades            
         </h2>
-        <img class="top-mountain-image" src="/src/lib/images/north-cascades-2.jpg" alt="North Cascades"> 
+        <img class="top-mountain-image" src="/images/north-cascades-2.jpg" alt="North Cascades"> 
     </div>
     <div>
         <p>
