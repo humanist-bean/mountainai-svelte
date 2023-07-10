@@ -1,11 +1,46 @@
 <script>
-import {createEventDispatcher} from 'svelte';
+    import {createEventDispatcher} from 'svelte';
 
-const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher();
 
-function clickedUploadBtn(){
-    dispatch('clicked-upload-btn');
-}
+    function clickedUploadBtn(){
+        dispatch('clicked-upload-btn');
+    }
+
+    // Code For Image Upload on Button Click
+    let input;
+    let files = null;
+    let container;
+    let image;
+    let placeholder;
+    let showImage = false;
+
+    /*
+    $: if (files) {
+            const fileText = files[0].text();
+            fileText.then((text) => {
+                template = text;
+                console.log(text);
+            });
+            files = null;
+    } */
+
+    function onClick() {
+        console.log("TOTOTO");
+        input.click();
+    }
+
+    function handleFileUpload() {
+        console.log("YOYOYOYO");
+        if (files) {
+        const fileText = files[0].text();
+        fileText.then((text) => {
+            template = text;
+            console.log(text);
+        });
+        files = null;
+        }
+  }
 </script>
 
 <div>
@@ -13,9 +48,10 @@ function clickedUploadBtn(){
     <input type="file" id="upload" hidden/>
 	<label for="upload">Choose file</label>
     -->
-    <button on:click={clickedUploadBtn} class="mtn-upload-btn" id="upload">
+    <button on:click={()=>{onClick(); clickedUploadBtn();}} class="mtn-upload-btn" id="upload">
         Choose File
     </button>
+    <input style="display:none" bind:this={input} bind:files={files} on:change={handleFileUpload} type="file" />
 </div>
 
 <style>

@@ -1,6 +1,7 @@
 <script>
     import { fade } from 'svelte/transition';
-    import { onMount, onDestroy } from 'svelte'
+    import { onMount, onDestroy } from 'svelte';
+    import Uploads from './Uploads.svelte';
 
     let intro_transition_ready = false;
     onMount(() => {intro_transition_ready= true;});
@@ -16,5 +17,6 @@
         SO NOW I SHOULD BE GOOD TO START WORKING ON DATABASE STUFF
         IT FEELS WEIRD THAT I'M DOING ALL MY AUTH ON THE FRONTEND BESIDES PASSING THE uid
         in params BUT APPARENTLY THAT'S HOW FIREBASE IS SUPPOSED TO WORK!
+        <Uploads uid={data.uid} />
     </div>
 {/if}
