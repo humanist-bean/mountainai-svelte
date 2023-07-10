@@ -1,57 +1,53 @@
 <script>
     import {createEventDispatcher} from 'svelte';
+    import {addDoc} from 'firebase/firestore';
 
     const dispatch = createEventDispatcher();
 
-    function clickedUploadBtn(){
-        dispatch('clicked-upload-btn');
+    function uploadedFile(){
+        dispatch('uploaded-file');
     }
 
-    // Code For Image Upload on Button Click
-    let input;
-    let files = null;
-    let container;
-    let image;
-    let placeholder;
-    let showImage = false;
+    // Code For Image Upload on Button Click 
 
-    /*
-    $: if (files) {
-            const fileText = files[0].text();
-            fileText.then((text) => {
-                template = text;
-                console.log(text);
-            });
-            files = null;
-    } */
+    let files;
 
-    function onClick() {
-        console.log("TOTOTO");
-        input.click();
-    }
-
-    function handleFileUpload() {
-        console.log("YOYOYOYO");
-        if (files) {
+    $: if (files && files[0]) {
+        console.log(files[0].name);
+        /*
         const fileText = files[0].text();
         fileText.then((text) => {
-            template = text;
+            console.log("IM RUNNING TOO");
             console.log(text);
+            //template = text;
         });
+        */
         files = null;
-        }
-  }
+        uploadedFile();
+    }
+
+    async function uploadPhoto() {
+		const response = await fetch('/');
+		number = await response.json();
+	}
 </script>
 
 <div>
     <!-- COMMENTED OUT SO WE CAN USE PLACEHOLDER BUTTON UNTIL BACKEND IS IMPLEMENTED
     <input type="file" id="upload" hidden/>
-	<label for="upload">Choose file</label>
-    -->
+	<label for="upload">Choose file</label>  
+    
     <button on:click={()=>{onClick(); clickedUploadBtn();}} class="mtn-upload-btn" id="upload">
         Choose File
-    </button>
-    <input style="display:none" bind:this={input} bind:files={files} on:change={handleFileUpload} type="file" />
+    
+    
+    </button> -->
+    <form class="mtn-upload-btn" method="POST" action="?/upload">
+        <label>
+            Choose File
+            <input class="hidden-input" name="mtn-img" bind:files id="upload" on:change={uploadedFile} type="file" hidden/>
+        </label>
+    </form>
 </div>
 
 <style>
@@ -68,7 +64,14 @@
         text-decoration: none;
     }
 
+    
     .mtn-upload-btn:hover{
         background-color: blue;
     }
+
+    .hidden-input{
+        height:100%;
+    }
+
+
 </style>
