@@ -1,6 +1,6 @@
 <script>
     import {createEventDispatcher} from 'svelte';
-    import {addDoc} from 'firebase/firestore';
+    import {addDoc, serverTimestamp} from 'firebase/firestore';
 
     const dispatch = createEventDispatcher();
 
@@ -14,6 +14,7 @@
 
     $: if (files && files[0]) {
         console.log(files[0].name);
+        uploadPhoto(files[0].name);
         /*
         const fileText = files[0].text();
         fileText.then((text) => {
@@ -26,9 +27,17 @@
         uploadedFile();
     }
 
-    async function uploadPhoto() {
-		const response = await fetch('/');
-		number = await response.json();
+    async function uploadPhoto(fileName) {
+        console.log("IM RUNNING");
+		const response = await fetch('/', {
+						method: 'POST',
+						body: JSON.stringify({ mtnName: fileName }),
+						headers: {
+							'Content-Type': 'application/json'
+						}
+                    });
+        console.log("IM RUNNING TOO");
+		const data = await response.json();
 	}
 </script>
 
@@ -42,7 +51,7 @@
     
     
     </button> -->
-    <form class="mtn-upload-btn" method="POST" action="?/upload">
+    <form class="mtn-upload-btn" method="POST">
         <label>
             Choose File
             <input class="hidden-input" name="mtn-img" bind:files id="upload" on:change={uploadedFile} type="file" hidden/>
