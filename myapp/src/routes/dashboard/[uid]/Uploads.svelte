@@ -1,9 +1,24 @@
 <script>
-    import {getUploads} from '$lib/js/firebase';
+    import {getUploads, db} from '$lib/js/firebase';
+    import {onSnapshot, query, collection, where} from 'firebase/firestore';
 	import { onMount, onDestroy } from 'svelte';
 
     export let uid;
-    let uploads = getUploads(uid);
+    let uploads;
+
+    // Subscribe to firestore updates to show newly added mountinas
+    const q = query(collection(db, "uploaded-images"), where("uid", "==", uid ));
+    const unsub = onSnapshot(q, (querySnapshot) => {
+    console.log("Current uploads data: ", querySnapshot.data);
+    uploads = querySnapshot.docs;
+    });
+    // Get mountains on initial load because onSnapshot only loads upon 
+    // changes to the collection
+    uploads = getUploads(uid);
+    
+    // Remember to unsub from firestore snapshot on component destruction
+    onDestroy(()=>{unsub();});
+    
 </script>
 
 <div class="flex-container">

@@ -25,17 +25,13 @@ const firebaseConfig = {
 // Initialize and Export Firebase app, auth, and database (Firestore)
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-const db = getFirestore(app);
+export const db = getFirestore(app);
 
 // Define and Export Database Access Functions
 
 export async function uploadImage(upload_details){
   try {
-    const docRef = await addDoc(collection(db, "users"), {
-      first: "Ada",
-      last: "Lovelace",
-      born: 1815
-    });
+    const docRef = await addDoc(collection(db, "uploaded-images"), upload_details);
     console.log("Document written with ID: ", docRef.id);
   } catch (e) {
     console.error("Error adding document: ", e);
@@ -43,6 +39,8 @@ export async function uploadImage(upload_details){
 }
 
 // Get uploaded mountain images and their data
+// PROBABLY USELESS BECAUSE I SUBSCRIBE TO DATABASE IN
+// uploads.svelte INSTEAD!!!
 export async function getUploads(uid){
   const user_uploads_query = query(collection(db, "uploaded-images"), where("uid", "==", uid));
   const querySnapshot = await getDocs(user_uploads_query);
