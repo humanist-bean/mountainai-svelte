@@ -2,7 +2,7 @@
     import {createEventDispatcher} from 'svelte';
     import {addDoc, collection, serverTimestamp} from 'firebase/firestore';
     import {user_store} from '$lib/js/user.js';
-    import {uploadImage} from '$lib/js/firebase.js';
+    import {uploadPhoto} from '$lib/js/firebase.js';
 
 
     const dispatch = createEventDispatcher();
@@ -28,52 +28,11 @@
 
     $: if (files && files[0]) {
         console.log(files[0].name);
-        uploadPhoto(files[0]);
-        /*
-        const fileText = files[0].text();
-        fileText.then((text) => {
-            console.log("IM RUNNING TOO");
-            console.log(text);
-            //template = text;
-        });
-        */
+        uploadPhoto(files[0], loggedIn, user_id);
         files = null;
         uploadedFile();
     }
 
-    //Uploads photo to firebase and sends it to MountainAI
-    //pass in individual image file, e.g. 'uploadPhoto(files[0])'
-    async function uploadPhoto(file) {
-        // Set up the image data in json form
-        const img_data = {
-            uploadName: file.name,
-            //placeholder mountain image URL
-            // replace with file URL from google cloud storage bucket
-            imageURL: "https://www.wildnatureimages.com/gallery/mountain-photos/all/",
-            hasUser: loggedIn,
-            createdAt: serverTimestamp(),
-            verifiedInput: false,
-            verifiedResult: false,
-            uid: user_id
-        };
-
-        // Upload the image to firebase storage and get image URL
-        // TODO: get image url and set img_data.imageURL.
-
-        // Upload the image details to firestore
-        uploadImage(img_data);
-
-        // Fetch to test backend REST APIs work
-        // Can eventually replace this with POST to MountainAI deployment
-		const response = await fetch('/', {
-						method: 'POST',
-						body: JSON.stringify({ mtnName: file.name }),
-						headers: {
-							'Content-Type': 'application/json'
-						}
-                    });
-		const data = await response.json();
-	}
 </script>
 
 <div>

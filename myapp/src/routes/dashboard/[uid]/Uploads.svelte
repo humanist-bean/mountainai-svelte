@@ -1,5 +1,5 @@
 <script>
-    import {getUploads, db} from '$lib/js/firebase';
+    import {getUploads, db, deleteUpload} from '$lib/js/firebase';
     import {onSnapshot, query, collection, where} from 'firebase/firestore';
 	import { onMount, onDestroy } from 'svelte';
 
@@ -9,7 +9,6 @@
     // Subscribe to firestore updates to show newly added mountinas
     const q = query(collection(db, "uploaded-images"), where("uid", "==", uid ));
     const unsub = onSnapshot(q, (querySnapshot) => {
-    console.log("Current uploads data: ", querySnapshot.data);
     uploads = querySnapshot.docs;
     });
     // Get mountains on initial load because onSnapshot only loads upon 
@@ -26,7 +25,12 @@
         <p>...loading uploads...</p>
     {:then uploads}
         {#each uploads as upload}
-            <div>{upload.data().uploadName}</div>
+            <div>{upload.data().uploadName}
+                <img src={upload.data().imageURL} alt={upload.data().uploadName}/>
+                <button on:click={deleteUpload(upload)} >
+                    Delete
+                </button>
+            </div>
         {/each}
     {:catch error}
         <p style="color: red">{error.message}</p>
@@ -37,10 +41,13 @@
 <style>
 .flex-container {
   display: flex;
+  flex-direction: column;
   background-color: #f1f1f1;
 }
 
 .flex-container > div {
+  display: flex;
+  flex-direction: column;
   background-color: black;
   color: white;
   width: auto;
@@ -49,5 +56,11 @@
   text-align: center;
   line-height: 75px;
   font-size: 15px;
+}
+
+.flex-container > div > img {
+    max-height: 10rem;
+    max-width: 10rem;
+    align-self: center;
 }
 </style>
