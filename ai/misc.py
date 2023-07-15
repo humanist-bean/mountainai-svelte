@@ -7,7 +7,9 @@ import json
 
 
 #Create random tensor to simulate image for testing Vertex AI Model Endpoint
-fake_img = torch.rand((3, 48, 48))
+#fake_img = torch.rand((3, 48, 48))
+fake_img = torch.rand((3, 32, 32))  #image must be divisible by 32
+# source: https://github.com/qubvel/segmentation_models/issues/282
 
 #fake_img_array = fake_img.numpy()
 #np.savetxt('fake_img.txt', fake_img_array, fmt='%d')
@@ -17,6 +19,6 @@ fake_img = torch.rand((3, 48, 48))
 tensor_list = fake_img.tolist()
 
 # Save the list to a text file using JSON format
-with open('fake_img.txt', 'w') as file:
+with open('fake_img_32.txt', 'w') as file:
     json.dump(tensor_list, file)
 
