@@ -48,10 +48,9 @@ export async function uploadPhoto(file, loggedIn, user_id) {
     uid: user_id
   };
 
-
-
-
+  
   if (loggedIn) {
+    console.log(`User is logged in so send ${file.name} data to firestore's upload history`);
     try {
       // Upload the image to firebase storage and get image URL
       // TODO: get image url and set img_data.imageURL.
@@ -65,9 +64,31 @@ export async function uploadPhoto(file, loggedIn, user_id) {
     }
   }
 
-
   // Fetch to test backend REST APIs work
   // Can eventually replace this with POST to MountainAI deployment
+  console.log(`Attempting to send ${file.name} image to mountainAI for evaluation`);
+  try{
+    //const reader = new FileReader();
+
+    // Create a FormData object and append the file to it
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await fetch('http://127.0.0.1:5000/predict', {
+      method: 'POST',
+      body: formData,
+      /*headers: {
+        'Content-Type': 'application/json'
+      }*/
+    });
+    const data = await response.json();
+    //console.log(data);
+    console.log("Successfully sent Image to MountainAI and got response: ", data);
+  } catch (e) {
+    console.error("Error sending image to MountainAI Server for prediction: ", e);
+  }
+
+  /*
   const response = await fetch('/', {
     method: 'POST',
     body: JSON.stringify(img_data),
@@ -76,8 +97,12 @@ export async function uploadPhoto(file, loggedIn, user_id) {
     }
   });
   const data = await response.json();
+  */
 }
 
+// Uploads photo to Firebase Storage and Firestore
+// Works by uploading to storage first then getting the storage URL and 
+// Sending that to firestore with addDoc along with other image details
 async function uploadToFirebase(file, img_data){
   // create a storage reference and start uploading the image
   let time = new Date().toDateString();

@@ -14,3 +14,10 @@ Input layer name: input_1:0
 Output layer name: Identity:0
 Input shape: (1, 3, 256, 256)
 Output shape: (1, 774)
+
+- Virtual Environment Details
+    -> Between Sveltekit, Flask, and FastAI there are some dependency conflicts, so building the 
+    project required the use of 3 different virtual environments (anaconda on PC and virtualenv on mac).
+    Running the project requires the use of 2 different environments. 1. For the FastAI and Flask server
+    to host the MountainAI model (On my PC 'Anaconda - FlaskFastAi'). 2. For the Sveltekit app (Just the
+    default WSL environment on PC for me)
