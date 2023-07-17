@@ -1,0 +1,6 @@
+{"content": "gs://mountain_ais/test_mtn.jpg", "mimeType": "image/jpeg"}
+{
+    "instances": [
+        {"content": "gs://mountain_ais/test_mtn.jpg", "mimeType": "image/jpeg"}
+    ]
+}

@@ -1,0 +1,16 @@
+- google.cloud.aiplatform was installed into the "TensorflowEnv" Conda environment on PC. To make it work I downgraded protobuf from version 4.something to version 3.20.x. This was done with pip in the conda terminal, not from the conda ui.
+
+- Installed gcloud cli with Google Cloud CLI installer for windows powershells
+for: gcloud auth application-default login
+
+- notes from gcloud setup:
+* Commands that require authentication will use alderfrench1@gmail.com by default
+* Commands will reference project `mountainai-392023` by default
+* Compute Engine commands will use region `us-west1` by default
+* Compute Engine commands will use zone `us-west1-b` by default
+
+- tf model details (converted to tf from original fastai .pkl mountainai model):
+Input layer name: input_1:0
+Output layer name: Identity:0
+Input shape: (1, 3, 256, 256)
+Output shape: (1, 774)

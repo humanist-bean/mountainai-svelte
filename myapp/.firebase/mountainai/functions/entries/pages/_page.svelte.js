@@ -1,17 +1,28 @@
-import { c as create_ssr_component, d as createEventDispatcher, e as escape, f as each, a as validate_store, b as subscribe, v as validate_component, o as onDestroy } from "../../chunks/ssr.js";
+import { c as create_ssr_component, a as validate_store, b as subscribe, d as createEventDispatcher, e as escape, f as each, v as validate_component, o as onDestroy } from "../../chunks/ssr.js";
+import "firebase/firestore";
+import { w as writable } from "../../chunks/index2.js";
+import { a as auth } from "../../chunks/firebase.js";
 import { t as transition, r as results_page } from "../../chunks/results_page.js";
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { w as writable } from "../../chunks/index.js";
+import { onAuthStateChanged } from "firebase/auth";
+const user_store = writable(false);
 const css$6 = {
-  code: ".mtn-upload-btn.s-yUZs8pZ_Ck3y{background-color:black;font-family:sans-serif;border-radius:0.7rem;cursor:pointer;display:flex;color:white;text-align:center;padding:0.66rem;margin:0.66rem;text-decoration:none}.mtn-upload-btn.s-yUZs8pZ_Ck3y:hover{background-color:blue}",
+  code: ".mtn-upload-btn.s-yUZs8pZ_Ck3y{background-color:black;font-family:sans-serif;border-radius:0.7rem;cursor:pointer;display:flex;color:white;text-align:center;padding:0.66rem;margin:0.66rem;text-decoration:none}.mtn-upload-btn.s-yUZs8pZ_Ck3y:hover{background-color:blue}.hidden-input.s-yUZs8pZ_Ck3y{height:100%}",
   map: null
 };
 const MtnBtn = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $user_store, $$unsubscribe_user_store;
+  validate_store(user_store, "user_store");
+  $$unsubscribe_user_store = subscribe(user_store, (value) => $user_store = value);
   createEventDispatcher();
   $$result.css.add(css$6);
-  return `<div> <button class="mtn-upload-btn s-yUZs8pZ_Ck3y" id="upload" data-svelte-h="svelte-wrvhfr">Choose File</button> </div>`;
+  {
+    if ($user_store) {
+      $user_store.uid;
+    }
+  }
+  $$unsubscribe_user_store();
+  return `<div> <form class="mtn-upload-btn s-yUZs8pZ_Ck3y" method="POST"><label>Choose File
+            <input class="hidden-input s-yUZs8pZ_Ck3y" name="mtn-img" id="upload" type="file" hidden></label></form> </div>`;
 });
 const css$5 = {
   code: "article.s-9eCoTt0bE3Z3{background:linear-gradient(\r\n            to right, \r\n            hsl(07 100% 62%), \r\n            hsl(182 100% 59%)\r\n        );-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center}h1.s-9eCoTt0bE3Z3{font-size:calc(var(--logo_size) * 1vmin);line-height:1.1}h1.s-9eCoTt0bE3Z3{margin:0}",
@@ -46,21 +57,6 @@ const MountainList = create_ssr_component(($$result, $$props, $$bindings, slots)
     return `<div class="s-onnRy7IDN1bO"><h3 class="s-onnRy7IDN1bO">${escape(mountain)}</h3> <img src="${"/images/" + escape(mountain, true) + ".jpg"}" alt="" class="s-onnRy7IDN1bO"> </div>`;
   })} </div>`;
 });
-const firebaseConfig = {
-  apiKey: "AIzaSyADDZbW75vUHeVXjwWxKVBLI_wM7aL3uxg",
-  authDomain: "mountainai.firebaseapp.com",
-  projectId: "mountainai",
-  storageBucket: "mountainai.appspot.com",
-  messagingSenderId: "272961028532",
-  appId: "1:272961028532:web:cef804c895aa06164e32e1",
-  measurementId: "G-YCM8DB9DLE"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-if (app.name && typeof window !== "undefined") {
-  getAnalytics(app);
-}
-const user_store = writable(false);
 const Auth_svelte_svelte_type_style_lang = "";
 const css$2 = {
   code: "div.s-OtWvLuRSXbvp.s-OtWvLuRSXbvp{flex-direction:column;align-content:center;text-align:center;justify-content:center;align-items:center;display:flex}div.s-OtWvLuRSXbvp>a.s-OtWvLuRSXbvp{text-decoration:none}.mtn-auth-btn.s-OtWvLuRSXbvp.s-OtWvLuRSXbvp{background-color:lightgrey;font-family:sans-serif;border-radius:0.7rem;cursor:pointer;display:flex;color:black;text-align:center;padding:0.66rem;margin:0.66rem;text-decoration:none;outline:0.2rem solid black}.mtn-auth-btn.s-OtWvLuRSXbvp.s-OtWvLuRSXbvp:hover{background-color:darkgreen}",
