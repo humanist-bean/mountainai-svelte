@@ -10,16 +10,10 @@ from fastai.vision.widgets import *
 class Predict:
     def __init__(self, filename):
         self.learn_inference = load_learner(Path()/filename)
-        #self.img = self.get_image_from_upload()
-        #if self.img is not None:
-        #   self.display_output()
-        #    self.get_prediction()
+
 
     @staticmethod
     def get_image_from_upload(self, uploaded_file):
-        #uploaded_file = self.get_file_upload()
-        #uploaded_file = st.file_uploader(
-        #    "Upload Files", type=['png', 'jpeg', 'jpg'])
         if uploaded_file is not None:
             return PILImage.create((uploaded_file))
         return None
@@ -29,21 +23,29 @@ class Predict:
     #def display_output(self):
     #   st.image(self.img.to_thumb(500, 500), caption='Uploaded Image')
 
+    # Method to get prediction from FastAI model, takes file to make prediction with
+    # returns: pred (class name), probs[pred_idx] (confidence in top guess)
+    # TODO: find/create list of labels in order so I can return top N guesses  for list 
+    # under main prediction. Can't do yet because I don't have a simple list of all the 
+    # Mountain names with their corresponding index, e.g. I can get the pred_idx for hood
+    # and its 'tensor(444)' however in my old list of names it is on line 7xx. 
+    # I think this is because the labels are scraped from the image names when creating the 
+    # model with FastAI, instead of from the list of mountains used to scrape images
     def get_prediction(self, file):
         img_ready = PILImage.create((file))
         pred, pred_idx, probs = self.learn_inference.predict(img_ready)
         print(f'**Prediction**: {pred}')
         print(f'**Probability**: {probs[pred_idx]*100:.02f}%')
-        return pred, probs[pred_idx]
+        return pred, probs[pred_idx].item()
 
 
-
-# if __name__ == '__main__':
-file_name = 'models/model.pkl'
+model_path = 'models/model.pkl'
 print("Building Predict Class Instance")
-predictor = Predict(file_name)
+predictor = Predict(model_path)
 
-# 1. Basic Flask REST API Setup
+classes_path = 'predict_classes/'
+
+#Basic Flask REST API Setup - Starts running app and serving /predict POST 
 print("Starting flask app")
 app = Flask(__name__)
 CORS(app)  
@@ -52,9 +54,6 @@ print("Flask app started, serving app POST method '/predict' ")
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
-        # we will get the file from the request
         file = request.files['file']
-        # convert that to bytes
-        #img_bytes = file.read()
-        class_id, class_name = predictor.get_prediction(file) #fastai takes img in PIL form!
-        return jsonify({'class_id': str(class_id), 'class_name': str(class_name)})
+        class_id, prediction_confidence = predictor.get_prediction(file) #fastai takes img in PIL form!
+        return jsonify({'class_id': str(class_id), 'prediction_confidence': str(prediction_confidence)});

@@ -34,6 +34,26 @@ export const storage = getStorage(app);
 //Uploads photo to firebase and sends it to MountainAI
 //pass in individual image file, e.g. 'uploadPhoto(files[0])'
 export async function uploadPhoto(file, loggedIn, user_id) {
+  // POST file to MountainAI REST API (Flask) for prediction
+  console.log(`Attempting to send ${file.name} image to mountainAI for evaluation`);
+  try{
+    //const reader = new FileReader();
+
+    // Create a FormData object and append the file to it
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await fetch('http://127.0.0.1:5000/predict', {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await response.json();
+    console.log("Successfully sent Image to MountainAI and got response: ", data);
+  } catch (e) {
+    console.error("Error sending image to MountainAI Server for prediction: ", e);
+  }
+
+  // Store image and image details in firebase
   // Set up the image data in json form
   const img_data = {
     uploadName: file.name,
@@ -47,7 +67,6 @@ export async function uploadPhoto(file, loggedIn, user_id) {
     verifiedResult: false,
     uid: user_id
   };
-
   
   if (loggedIn) {
     console.log(`User is logged in so send ${file.name} data to firestore's upload history`);
@@ -55,7 +74,7 @@ export async function uploadPhoto(file, loggedIn, user_id) {
       // Upload the image to firebase storage and get image URL
       // TODO: get image url and set img_data.imageURL.
       
-      uploadToFirebase(file, img_data);
+      uploadSearchPhotoToFirebase(file, img_data);
       // Upload the image details to firestore
       //const docRef = await addDoc(collection(db, "uploaded-images"), img_data);
       //console.log("Document written with ID: ", docRef.id);
@@ -64,46 +83,14 @@ export async function uploadPhoto(file, loggedIn, user_id) {
     }
   }
 
-  // Fetch to test backend REST APIs work
-  // Can eventually replace this with POST to MountainAI deployment
-  console.log(`Attempting to send ${file.name} image to mountainAI for evaluation`);
-  try{
-    //const reader = new FileReader();
 
-    // Create a FormData object and append the file to it
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    const response = await fetch('http://127.0.0.1:5000/predict', {
-      method: 'POST',
-      body: formData,
-      /*headers: {
-        'Content-Type': 'application/json'
-      }*/
-    });
-    const data = await response.json();
-    //console.log(data);
-    console.log("Successfully sent Image to MountainAI and got response: ", data);
-  } catch (e) {
-    console.error("Error sending image to MountainAI Server for prediction: ", e);
-  }
 
-  /*
-  const response = await fetch('/', {
-    method: 'POST',
-    body: JSON.stringify(img_data),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-  const data = await response.json();
-  */
 }
 
 // Uploads photo to Firebase Storage and Firestore
 // Works by uploading to storage first then getting the storage URL and 
 // Sending that to firestore with addDoc along with other image details
-async function uploadToFirebase(file, img_data){
+async function uploadSearchPhotoToFirebase(file, img_data){
   // create a storage reference and start uploading the image
   let time = new Date().toDateString();
   const imageReference = `uploaded-images/${time}.${file.name}`;
@@ -184,6 +171,42 @@ export async function deleteUpload(upload){
   }).catch((error) => {
     console.error("Error deleting document from firestore: ", error);
   });
+}
+
+
+// Function to cache wikipedia info by sending it to firestore 
+// so we can load mountain results faster 
+// NOTE: COOL USE CASE OF CLIENT SIDE WEB SCRAPING!!!
+// THANKS FOR THE IDEA CODY ANDERSON!
+export async function uploadWikiInfoToFirestore(predict_result, wiki_img_url, wiki_top_text, loggedIn, user_id){
+  // Set up the wiki data in json form
+  const wiki_data = {
+    predictionMtnName: predict_result,
+    wikiImageURL: wiki_img_url,
+    wikiMtnSummary: wiki_top_text,
+    createdAt: serverTimestamp(),
+  };
+
+  addDoc(collection(db, "wiki-cache"), wiki_data).then((docRef) => {
+    console.log("Document written with ID: ", docRef.id);
+  });
+}
+
+// Function to check wiki cache for use before performing client side wiki scraping
+// Args: mtn_name (string of mountain name returned by MountainAI prediction)
+// Returns: wiki_img_url, wiki_top_text
+// Usage: check if return values are false, if so scrape wiki, if not display them
+export async function getWikiCache(mtn_name){
+  const user_uploads_query = query(collection(db, "wiki-cache"), where("predictionMtnName", "==", mtn_name));
+  const querySnapshot = await getDocs(user_uploads_query);
+  // Return an array of the docs in the collection
+  if(querySnapshot){
+    const wikiImg = await querySnapshot.docs.data().wikiImageURL;
+    const wikiText = await querySnapshot.docs.data().wikiMtnSummary;
+    return wikiImg, wikiText;
+  } else {
+    return false, false;
+  }
 
 }
 

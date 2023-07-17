@@ -5,6 +5,7 @@
 	import { fade } from 'svelte/transition';
 	import {transition_start, transition_end} from '$lib/js/transitions.js';
 	import {show_results_page} from '$lib/js/results_page.js';
+	import {getWikiInfoFromName} from '$lib/js/wiki.js';
 
 	let logo_size = 11;
 </script>
@@ -30,8 +31,11 @@ on:outroend={transition_end}>
 		<!-- IMPORTANT NOTE ON 'transtion_start();': It needs to be attached to this button,
 		because if its attached to 'introstart' instead then the animations for the home page
 		transition out and main mountain transition occur simoultaneously and the transition doesn't work! -->
-		<MtnBtn on:uploaded-file={()=> {show_results_page(); transition_start();}}/>
+		<MtnBtn on:uploaded-file={() => {show_results_page(); transition_start();}}/>
 		<Auth />
+		<button on:click={() => getWikiInfoFromName("mt hood")}>
+			Test Wiki
+		</button>
 	</h2>
 
 </section>

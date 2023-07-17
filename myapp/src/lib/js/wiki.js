@@ -1,0 +1,110 @@
+/* wiki.js
+Description: Contains functions for searching for mountain prediction results
+with wikipedia API and returning the relevant data 
+
+Source: https://femkreations.com/how-to-build-a-wikipedia-search-app-in-9-steps/
+*/
+
+// Description: takes a mountain name e.g. 'mt hood' and returns the
+// wikipedia info we want, e.g. mountain image URL, summary, and elevation
+// from wikipedia with wikipedia API 
+export async function getWikiInfoFromName(name){
+    // Step 1. Get top wikipedia search result given mountain name
+    // should be the actual mountain's page, but potentially not always
+    const wikiApiSearchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&prop=info&
+    inprop=url&utf8=&format=json&origin=*&srlimit=20&srsearch=${name}`;
+    let topResult;
+
+    try{
+        const response = await fetch(wikiApiSearchUrl);
+        const data = await response.json();
+        const resultsArray = data.query.search;
+        topResult =  resultsArray[0];
+        console.log("Retrieved top prediction result from wikipedia successfully:");
+    } catch(e){
+        console.log('An error occurred in 1:', e);
+    }
+    console.log(topResult);
+
+    // Step 2. Retrieve top result wiki page content using topResult.title obtained in step 1
+    const topTitle = await topResult.title;
+    const topPageApiUrl = encodeURI(`https://en.wikipedia.org/w/api.php?action=parse&origin=*&format=json&page=${topTitle}`);
+    let topHtml;
+    try{
+        const response = await fetch(topPageApiUrl);
+        console.log(response);
+        const json = await response.json();
+        topHtml = await json.parse.text["*"];
+        console.log("Retrieved top page html from wikipedia api successfully:");
+    } catch(e){
+        console.log('An error occurred in 2:', e);
+    }
+    //console.log(topHtml);
+
+    // Step 3. Extract (Top) description, elevation, and main image URL
+    // from wiki page html retrieved in step 2
+    const htmlContent = await topHtml;
+    extractMtnInfo(htmlContent);
+}
+
+// Description: helper function that extracts the relevant mountain info
+// given the htmlContent (string of the html).
+// Returns: mainImageUrl, mainImageElement
+function extractMtnInfo(htmlContent){
+    try{
+        // Assuming you have retrieved the HTML content of the Wikipedia page and stored it in a variable 'htmlContent'
+        // Step 1: Create a DOM Element
+        const tempElement = document.createElement('div');
+        tempElement.innerHTML = htmlContent;
+
+        // Step 2: Locate the Summary Box
+        const summaryBox = tempElement.querySelector('.infobox');
+
+        // Step 3: Extract '(Top)' Description
+        //const topDescriptionElement = summaryBox.querySelector('.description');
+        //const topDescription = topDescriptionElement.textContent;
+        //Find all <p> elements and the <h2> element
+        const paragraphs = tempElement.querySelectorAll('p');
+        const h2Element = tempElement.querySelector('h2');
+
+        // Step 3: Extract text from the first <p> elements until the <h2> element is encountered
+        let extractedText = '';
+        for (const paragraph of paragraphs) {
+        if (paragraph === h2Element) {
+            break; // Stop extracting text when the <h2> element is encountered
+        }
+
+        // Append the paragraph's text content to the extractedText
+        extractedText += paragraph.textContent.trim() + ' ';
+        }
+
+        // Trim the final extractedText to remove any leading/trailing whitespace
+        extractedText = extractedText.trim();
+
+        // Example usage: Log the extracted text
+        //console.log(extractedText);
+
+        // Step 4: Extract Main Image URL
+        const mainImageElement = summaryBox.querySelector('img');
+        const mainImageUrl = mainImageElement.getAttribute('src');
+
+        /* Step 5: Extract Elevation
+        const elementWithTitleSummit = summaryBox.querySelector('[title="Summit"]');
+        // Get the element containing the elevation number
+        // by looping through sibling nodes to handle whitespace nodes
+        let elevationElement = elementWithTitleSummit.nextElementSibling;
+        const elevation = elevationElement.textContent;
+        console.log('Elevation:', elevation);
+        */
+
+        // Print the extracted information
+        //console.log('(Top) Description:', topDescription);
+        //console.log('Main Image URL:', mainImageUrl);
+
+        console.log("Successfully extracted relevant mountain information from wikipedia!")
+        return mainImageUrl, mainImageElement;
+
+    } catch(e){
+        console.log('An error occurred in 3:', e);
+    }
+}
