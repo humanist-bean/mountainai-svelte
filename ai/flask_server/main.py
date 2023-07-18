@@ -39,6 +39,8 @@ class Predict:
         return pred, probs[pred_idx].item()
 
 
+
+
 model_path = 'models/model.pkl'
 print("Building Predict Class Instance")
 predictor = Predict(model_path)
@@ -48,12 +50,16 @@ classes_path = 'predict_classes/'
 #Basic Flask REST API Setup - Starts running app and serving /predict POST 
 print("Starting flask app")
 app = Flask(__name__)
-CORS(app)  
+CORS(app) 
 
-print("Flask app started, serving app POST method '/predict' ")
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
         file = request.files['file']
         class_id, prediction_confidence = predictor.get_prediction(file) #fastai takes img in PIL form!
         return jsonify({'class_id': str(class_id), 'prediction_confidence': str(prediction_confidence)});
+
+print("Flask app started, serving app POST method '/predict' ")
+
+if __name__ == '__main__':
+    app.run()

@@ -72,7 +72,11 @@ export async function uploadPhoto(file, loggedIn, user_id) {
 // Sending that to firestore with addDoc along with other image details
 async function uploadSearchPhotoToFirebase(file, img_data){
   // create a storage reference and start uploading the image
-  let time = new Date().toDateString();
+  const currentDateInSeconds = Math.floor(Date.now() / 1000);
+  let time = currentDateInSeconds;
+  //let time = new Date().toDateString(); // THIS CREATES PROBLEMS IF USER UPLOADS IMG
+  // WITH SAME NAME ON SAME DAY!!!
+  
   const imageReference = `uploaded-images/${time}.${file.name}`;
   const storageRef = ref(storage, imageReference);
   const uploadTask = uploadBytesResumable(storageRef, file);
@@ -162,7 +166,11 @@ export async function makePrediction(file){
       const formData = new FormData();
       formData.append('file', file);
       
-      const response = await fetch('http://127.0.0.1:5000/predict', {
+      // Local URL: http://127.0.0.1:5000/predict
+      // Google App Engine URL: https://mountainai-392023.wl.r.appspot.com/predict
+      // ngrok PORT Tunneling URL to host from local PC: 
+      // https://7a31-2601-1c0-cc00-4840-86d-f509-d9c-2df1.ngrok-free.app/predict
+      const response = await fetch('https://6f58-2601-1c0-cc00-4840-86d-f509-d9c-2df1.ngrok-free.app/predict', {
         method: 'POST',
         body: formData,
       });

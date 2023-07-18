@@ -57,6 +57,7 @@
 </div>
 
 <style>
+    /* TODO: FIX THIS STUPID BUTTON IT ONLY WORKS IF YOU CLICK ON THE TEXT WITHIN IT */
     .mtn-upload-btn{
         background-color: black;
         font-family: sans-serif;

@@ -58,6 +58,7 @@ on:outroend={transition_end}>
 
 	h1 {
 		width: 100%;
+		font-weight: bold;
 	}
 
 	.welcome {

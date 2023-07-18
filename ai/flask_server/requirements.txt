@@ -1,2 +1,4 @@
-flask
+flask==2.2.2
+flask_cors
 fastai
+ipywidgets

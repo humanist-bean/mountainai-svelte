@@ -21,3 +21,13 @@ Output shape: (1, 774)
     Running the project requires the use of 2 different environments. 1. For the FastAI and Flask server
     to host the MountainAI model (On my PC 'Anaconda - FlaskFastAi'). 2. For the Sveltekit app (Just the
     default WSL environment on PC for me)
+
+- Python Google App Engine Instance for Flask Server with AI 
+ -> set its instance_class: F4 in app.yaml which may be more than necessary which
+ costs money, consider trying F2 if it works fine in F4
+
+ - The MtnBtn is broken and you have to click on its inner text - annoying I know I will fix it soon
+
+ - to serve the Flask Server with Ngrok on PC, navigate to the folder containing Ngrok /misc/ngrok and run 
+ ./ngrok.exe http 5000 in powershell 
+ 

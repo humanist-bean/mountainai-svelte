@@ -24,8 +24,8 @@
     article {
         background: linear-gradient(
             to right, 
-            rgb(55, 122, 78), 
-            rgb(5, 2, 49)
+            hsl(07 100% 62%), 
+            hsl(182 100% 59%)
         );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
