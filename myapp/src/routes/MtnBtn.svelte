@@ -19,10 +19,6 @@
         user_id = "0";
     }
 
-    function finishedFileUploads(){
-        //dispatch('uploaded-file');
-        goto("/result");
-    }
 
     // Code For Image Upload on Button Click 
 
@@ -30,6 +26,8 @@
     // Get Prediction and set prediction store with File and Upload it to firebase if user signed in
     $: if (files && files[0]) {
         console.log(files[0].name);
+        prediction_store.set(false); // Makes it so 'Waiting for prediciton' shows in /result
+        goto('/result')
         // Make Prediction with MountainAI REST API
         makePrediction(files[0]).then( (predictionData) => {
             prediction_store.set(predictionData);
@@ -42,7 +40,6 @@
         }
 
         files = null;
-        finishedFileUploads();
     }
 
 </script>

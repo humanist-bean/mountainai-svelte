@@ -1,9 +1,10 @@
 import { c as create_ssr_component, a as validate_store, b as subscribe, o as onDestroy } from "../../chunks/ssr.js";
-import "firebase/firestore";
 import "../../chunks/firebase.js";
-import { t as transition, r as results_page } from "../../chunks/results_page.js";
+/* empty css                                               */import "firebase/auth";
 import { w as writable } from "../../chunks/index2.js";
 const header = writable(false);
+const transition = writable(true);
+const results_page = writable(false);
 const Header_svelte_svelte_type_style_lang = "";
 const styles = "";
 const _layout_svelte_svelte_type_style_lang = "";

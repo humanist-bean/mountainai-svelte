@@ -44,7 +44,7 @@
 {#if $prediction_store}
     <div class="prediction-container">
         <h1>Top Prediction Result: {$prediction_store.class_id.toUpperCase()} <br/> 
-            Confidence: {($prediction_store.prediction_confidence * 100).toFixed(2)}</h1>
+            Confidence: {($prediction_store.prediction_confidence * 100).toFixed(2)}%</h1>
     </div>
     {#await promise}
         <p>...waiting for contents from wikipedia</p>
@@ -68,7 +68,7 @@
     {/await}
 {:else}
     <div transition:fade>
-        Click Choose File to Upload Image for Prediction!
+       <h1> ... Waiting for Prediction Result, if waiting longer than 1min select new file ...</h1>
     </div>
 {/if}
 
@@ -79,6 +79,7 @@
 <style>
     h1 {
         font-size: 1rem;
+        font-weight: bold;
     }
 
     .prediction-container {

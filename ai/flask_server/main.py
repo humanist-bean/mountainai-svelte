@@ -4,12 +4,20 @@ from PIL import Image
 from fastai.vision.all import *
 from fastai.vision.widgets import *
 
+"""SETUP PATHLIB SPECIFICALLY FOR WINDOWS DEPLOYMENT
+import pathlib
+
+plt = platform.system()
+if plt == 'Linux': pathlib.WindowsPath = pathlib.PosixPath"""
+
 
 """FASTAI SETUP"""
 
 class Predict:
     def __init__(self, filename):
-        self.learn_inference = load_learner(Path()/filename)
+        #self.learn_inference = load_learner(Path()/filename)
+        self.learn_inference = load_learner("./%s"%(filename))
+
 
 
     @staticmethod

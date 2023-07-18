@@ -18,7 +18,7 @@ with the best images for training.
 
  - Databases: I used Firebase Storage for images and firestore for text data
 
- - Deployment: I deployed the flask server to google app engine, and the SvelteKit site to firebase
+ - Deployment: I deployed the flask server that serves the FastAI model to google app engine, and the SvelteKit site to firebase
 
  - Authentication: I used Firebase Auth
 

@@ -13,12 +13,9 @@ const firebaseConfig = {
   measurementId: "G-YCM8DB9DLE"
 };
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+getAuth(app);
 getFirestore(app);
 getStorage(app);
 if (app.name && typeof window !== "undefined") {
   getAnalytics(app);
 }
-export {
-  auth as a
-};

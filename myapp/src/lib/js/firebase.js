@@ -168,9 +168,9 @@ export async function makePrediction(file){
       
       // Local URL: http://127.0.0.1:5000/predict
       // Google App Engine URL: https://mountainai-392023.wl.r.appspot.com/predict
-      // ngrok PORT Tunneling URL to host from local PC: 
+      // ngrok PORT Tunneling URL to host from local PC (NOTE: This changes with each ngrok http run): 
       // https://7a31-2601-1c0-cc00-4840-86d-f509-d9c-2df1.ngrok-free.app/predict
-      const response = await fetch('https://6f58-2601-1c0-cc00-4840-86d-f509-d9c-2df1.ngrok-free.app/predict', {
+      const response = await fetch('https://d8b7-2601-1c0-cc00-4840-86d-f509-d9c-2df1.ngrok-free.app/predict', {
         method: 'POST',
         body: formData,
       });

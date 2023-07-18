@@ -29,5 +29,5 @@ Output shape: (1, 774)
  - The MtnBtn is broken and you have to click on its inner text - annoying I know I will fix it soon
 
  - to serve the Flask Server with Ngrok on PC, navigate to the folder containing Ngrok /misc/ngrok and run 
- ./ngrok.exe http 5000 in powershell 
- 
+ ./ngrok.exe http 5000 in powershell . Also note ngrok is online with a website you have an account 
+ with google and whatnot
