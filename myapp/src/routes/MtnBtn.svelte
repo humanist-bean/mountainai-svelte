@@ -27,7 +27,7 @@
     $: if (files && files[0]) {
         console.log(files[0].name);
         prediction_store.set(false); // Makes it so 'Waiting for prediciton' shows in /result
-        goto('/result')
+        goto('/result'); // redirect user to avoid them clicking choose file fast repeatedly
         // Make Prediction with MountainAI REST API
         makePrediction(files[0]).then( (predictionData) => {
             prediction_store.set(predictionData);

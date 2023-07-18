@@ -10,7 +10,7 @@ return {
 	assets: new Set(["favicon.png","images/Diamond Peak.jpg","images/Mt. Hood.jpg","images/Mt. Jefferson.jpg","images/Mt. Rainier.jpg","images/Mt. Thielsen.jpg","images/github.svg","images/north-cascades-2.jpg","images/north-cascades-img.webp","images/svelte-logo.svg","images/svelte-welcome.png","images/svelte-welcome.webp","robots.txt"]),
 	mimeTypes: {".png":"image/png",".jpg":"image/jpeg",".svg":"image/svg+xml",".webp":"image/webp",".txt":"text/plain"},
 	_: {
-		client: {"start":"_app/immutable/entry/start.3a1a93c1.js","app":"_app/immutable/entry/app.89444872.js","imports":["_app/immutable/entry/start.3a1a93c1.js","_app/immutable/chunks/scheduler.9341ea61.js","_app/immutable/chunks/singletons.b20a34aa.js","_app/immutable/chunks/index.9eb50c3c.js","_app/immutable/entry/app.89444872.js","_app/immutable/chunks/scheduler.9341ea61.js","_app/immutable/chunks/index.66f07722.js"],"stylesheets":[],"fonts":[]},
+		client: {"start":"_app/immutable/entry/start.a4d7f58c.js","app":"_app/immutable/entry/app.86ba33f0.js","imports":["_app/immutable/entry/start.a4d7f58c.js","_app/immutable/chunks/scheduler.9341ea61.js","_app/immutable/chunks/singletons.55805241.js","_app/immutable/chunks/index.9eb50c3c.js","_app/immutable/entry/app.86ba33f0.js","_app/immutable/chunks/scheduler.9341ea61.js","_app/immutable/chunks/index.66f07722.js"],"stylesheets":[],"fonts":[]},
 		nodes: [
 			__memo(() => import('./nodes/0.js')),
 			__memo(() => import('./nodes/1.js')),
