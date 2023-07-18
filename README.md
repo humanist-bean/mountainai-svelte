@@ -14,24 +14,30 @@ with the best images for training.
 
 ## Design Aspects
  - Image Classification AI Model: trained with FastAI (which uses PyTorch) and using the ResNet 34 Architecture, here's a link to the repo that contains the code used to train the model and scrape its images:
+ <br>
  [MountainAI AI Training and Data Scraping Repo](https://github.com/humanist-bean/MountainAI)
+ <br>
  Relevant File Path: "mountainai-svelte/ai/"
 
  - Image Scraper and Training Data: I wrote a web scraper with Python using Selenium and Beautiful soup that can also be found in the repo above. I used an uncleaned dataset of ~75000 images of mountains from bing images to train the current model for the world's tallest ~750 mountains on wikipedia.
 
  - Website Frameworks: I used SvelteKit to build the website's front-end and backend. I also used a Flask server for my REST API that actually serves the FastAI model's predictions given a POST request with an image.
+ <br>
  Relevant File Paths: "mountainai-svelte/myapp", "mountainai-svelte/ai/flask_server"
 
  - Databases: I used Firebase Storage for images and firestore for text data
+ <br>
  Relevant File Paths: "mountainai-svelte/myapp/src/lib/js/firebase.js"
 
  - Mountain Prediction Result and Client Side Wikipedia API/Scraping with Caching: The AI model only outputs a list of probabilities and the class name of the top prediction, so to get summaries of all the mountains I use the wikipedia API and javascript to extract the main wikipedia mountain image and description. I also cache this information in FireStore so it can be retrieved faster in the future, special thanks to Cody Anderson for this idea! 
+ <br>
  Relevant File Paths: "mountainai-svelte/myapp/src/lib/js/firebase.js", "mountainai-svelte/myapp/src/lib/js/wiki.js",
  "mountainai-svelte/myapp/src/routes/MtnBtn.svelte", "mountainai-svelte/myapp/src/routes/result/MainMountain.svelte"
 
  - Deployment: I deployed the flask server that serves the FastAI model to google app engine, and the SvelteKit site to firebase. NOTE: I'm running into trouble with the google app engine Flask Server, so I'm using ngrok to serve the prediction REST API for now.
 
  - Authentication: I used Firebase Auth
+ <br>
  Relevant File Paths: "mountainai-svelte/myapp/routes/auth.svelte"
 
   
