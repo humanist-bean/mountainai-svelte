@@ -34,24 +34,6 @@ export const storage = getStorage(app);
 //Uploads photo to firebase and sends it to MountainAI
 //pass in individual image file, e.g. 'uploadPhoto(files[0])'
 export async function uploadPhoto(file, loggedIn, user_id) {
-  // POST file to MountainAI REST API (Flask) for prediction
-  console.log(`Attempting to send ${file.name} image to mountainAI for evaluation`);
-  try{
-    //const reader = new FileReader();
-
-    // Create a FormData object and append the file to it
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    const response = await fetch('http://127.0.0.1:5000/predict', {
-      method: 'POST',
-      body: formData,
-    });
-    const data = await response.json();
-    console.log("Successfully sent Image to MountainAI and got response: ", data);
-  } catch (e) {
-    console.error("Error sending image to MountainAI Server for prediction: ", e);
-  }
 
   // Store image and image details in firebase
   // Set up the image data in json form
@@ -82,8 +64,6 @@ export async function uploadPhoto(file, loggedIn, user_id) {
       console.error("Error adding document: ", e);
     }
   }
-
-
 
 }
 
@@ -173,22 +153,46 @@ export async function deleteUpload(upload){
   });
 }
 
+export async function makePrediction(file){
+    // POST file to MountainAI REST API (Flask) for prediction
+    console.log(`Attempting to send ${file.name} image to mountainAI for evaluation`);
+    try{
+      //const reader = new FileReader();
+      // Create a FormData object and append the file to it
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await fetch('http://127.0.0.1:5000/predict', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+      console.log("Successfully sent Image to MountainAI and got response: ", data);
+      return data;
+    } catch (e) {
+      console.error("Error sending image to MountainAI Server for prediction: ", e);
+    }
+
+}
 
 // Function to cache wikipedia info by sending it to firestore 
 // so we can load mountain results faster 
 // NOTE: COOL USE CASE OF CLIENT SIDE WEB SCRAPING!!!
 // THANKS FOR THE IDEA CODY ANDERSON!
-export async function uploadWikiInfoToFirestore(predict_result, wiki_img_url, wiki_top_text, loggedIn, user_id){
+export async function uploadWikiInfoToFirestore(predict_result, wiki_img_url, wiki_top_text, wiki_page_name){
   // Set up the wiki data in json form
   const wiki_data = {
     predictionMtnName: predict_result,
     wikiImageURL: wiki_img_url,
     wikiMtnSummary: wiki_top_text,
+    wikiPageName: wiki_page_name,
     createdAt: serverTimestamp(),
   };
 
   addDoc(collection(db, "wiki-cache"), wiki_data).then((docRef) => {
-    console.log("Document written with ID: ", docRef.id);
+    console.log("Uploaded wiki info to firwstore wiki cache - Document written with ID: ", docRef.id);
+  }).catch((error) => {
+    console.error("Error uploading wiki info to firestore cache: ", error);
   });
 }
 
@@ -200,12 +204,34 @@ export async function getWikiCache(mtn_name){
   const user_uploads_query = query(collection(db, "wiki-cache"), where("predictionMtnName", "==", mtn_name));
   const querySnapshot = await getDocs(user_uploads_query);
   // Return an array of the docs in the collection
-  if(querySnapshot){
-    const wikiImg = await querySnapshot.docs.data().wikiImageURL;
-    const wikiText = await querySnapshot.docs.data().wikiMtnSummary;
-    return wikiImg, wikiText;
+  if(querySnapshot.docs.length > 0){
+    console.log("Found wiki info in firestore cache, returning in Promise.");
+    const wikiImg = await querySnapshot.docs[0].data().wikiImageURL;
+    const wikiText = await querySnapshot.docs[0].data().wikiMtnSummary;
+    const wikiTitle = await querySnapshot.docs[0].data().wikiPageName;
+    const wikiCache = {
+      mainImageUrl: wikiImg,
+      extractedText: wikiText,
+      topTitle: wikiTitle
+    }
+    return new Promise((resolve, reject) =>{
+        try{
+            resolve(wikiCache);
+        } catch(e){
+            console.log('An error occurred in getWikiCache:', e);
+            reject(e);
+        }
+    });
   } else {
-    return false, false;
+    console.log("Didn't find wiki info in firestore cache, returning promise that resolves to false.")
+    return new Promise((resolve, reject) =>{
+      try{
+          resolve(false);
+      } catch(e){
+          console.log('An error occurred in getWikiCache:', e);
+          reject(e);
+      }
+    });
   }
 
 }

@@ -2,16 +2,18 @@
     import { fade } from 'svelte/transition';
     import { onMount, onDestroy } from 'svelte';
     import Uploads from './Uploads.svelte';
-
-    let intro_transition_ready = false;
-    onMount(() => {intro_transition_ready= true;});
+    import {show_header} from '$lib/js/header.js';
 
     export let data;
+
+    let intro_transition_ready = false;
+    onMount(() => {intro_transition_ready= true; show_header();});
+
+
 </script>
 {#if intro_transition_ready}
     <div transition:fade>
-        Inner Dashboard
-        The Current User's UID is: {data.uid};
+        <h1>Upload History</h1>
         <Uploads uid={data.uid} />
     </div>
 {/if}

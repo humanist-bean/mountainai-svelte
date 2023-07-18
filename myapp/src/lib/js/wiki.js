@@ -6,7 +6,7 @@ Source: https://femkreations.com/how-to-build-a-wikipedia-search-app-in-9-steps/
 */
 
 // Description: takes a mountain name e.g. 'mt hood' and returns the
-// wikipedia info we want, e.g. mountain image URL, summary, and elevation
+// wikipedia info we want: mountain image URL, summary, and title
 // from wikipedia with wikipedia API 
 export async function getWikiInfoFromName(name){
     // Step 1. Get top wikipedia search result given mountain name
@@ -44,67 +44,71 @@ export async function getWikiInfoFromName(name){
     // Step 3. Extract (Top) description, elevation, and main image URL
     // from wiki page html retrieved in step 2
     const htmlContent = await topHtml;
-    extractMtnInfo(htmlContent);
+    //let mainImageUrl, extractedText;
+    const { mainImageUrl, extractedText } = await extractMtnInfo(htmlContent);
+    return new Promise((resolve, reject) =>{
+        try{
+            resolve({ mainImageUrl, extractedText, topTitle });
+        } catch(e){
+            console.log('An error occurred in 3:', e);
+            reject(e);
+        }
+    });
+
 }
 
 // Description: helper function that extracts the relevant mountain info
 // given the htmlContent (string of the html).
-// Returns: mainImageUrl, mainImageElement
-function extractMtnInfo(htmlContent){
-    try{
-        // Assuming you have retrieved the HTML content of the Wikipedia page and stored it in a variable 'htmlContent'
-        // Step 1: Create a DOM Element
-        const tempElement = document.createElement('div');
-        tempElement.innerHTML = htmlContent;
+// Returns: mainImageUrl, extractedText
+async function extractMtnInfo(htmlContent) {
+    return new Promise((resolve, reject) => {
+        try{
+            // Assuming you have retrieved the HTML content of the Wikipedia page and stored it in a variable 'htmlContent'
+            // Step A: Create a DOM Element
+            const tempElement = document.createElement('div');
+            tempElement.innerHTML = htmlContent;
 
-        // Step 2: Locate the Summary Box
-        const summaryBox = tempElement.querySelector('.infobox');
+            // Step B: Locate the Summary Box
+            const summaryBox = tempElement.querySelector('.infobox');
 
-        // Step 3: Extract '(Top)' Description
-        //const topDescriptionElement = summaryBox.querySelector('.description');
-        //const topDescription = topDescriptionElement.textContent;
-        //Find all <p> elements and the <h2> element
-        const paragraphs = tempElement.querySelectorAll('p');
-        const h2Element = tempElement.querySelector('h2');
+            // Step C: Extract '(Top)' Description
+            //const topDescriptionElement = summaryBox.querySelector('.description');
+            //const topDescription = topDescriptionElement.textContent;
+            //Find all <p> elements and the <h2> element
+            const paragraphs = tempElement.querySelectorAll('p');
+            const h2Element = tempElement.querySelector('h2');
 
-        // Step 3: Extract text from the first <p> elements until the <h2> element is encountered
-        let extractedText = '';
-        for (const paragraph of paragraphs) {
-        if (paragraph === h2Element) {
-            break; // Stop extracting text when the <h2> element is encountered
+            // Step D: Extract text from the first <p> elements until the <h2> element is encountered
+            let extractedText = '';
+            for (const paragraph of paragraphs) {
+            if (paragraph === h2Element) {
+                break; // Stop extracting text when the <h2> element is encountered
+            }
+
+            // Append the paragraph's text content to the extractedText
+            extractedText += paragraph.textContent.trim() + ' ';
+            }
+
+            // Trim the final extractedText to remove any leading/trailing whitespace
+            extractedText = extractedText.trim();
+
+            // Example usage: Log the extracted text
+            //console.log(extractedText);
+
+            // Step E: Extract Main Image URL
+            const mainImageElement = summaryBox.querySelector('img');
+            const mainImageUrl = mainImageElement.getAttribute('src');
+
+
+            console.log('Main Image URL:', mainImageUrl);
+            console.log('Extracted Text is: ', extractedText);
+
+            console.log("Successfully extracted relevant mountain information from wikipedia!");
+            resolve({ mainImageUrl, extractedText });
+
+        } catch(e){
+            console.log('An error occurred in 3:', e);
+            reject(e);
         }
-
-        // Append the paragraph's text content to the extractedText
-        extractedText += paragraph.textContent.trim() + ' ';
-        }
-
-        // Trim the final extractedText to remove any leading/trailing whitespace
-        extractedText = extractedText.trim();
-
-        // Example usage: Log the extracted text
-        //console.log(extractedText);
-
-        // Step 4: Extract Main Image URL
-        const mainImageElement = summaryBox.querySelector('img');
-        const mainImageUrl = mainImageElement.getAttribute('src');
-
-        /* Step 5: Extract Elevation
-        const elementWithTitleSummit = summaryBox.querySelector('[title="Summit"]');
-        // Get the element containing the elevation number
-        // by looping through sibling nodes to handle whitespace nodes
-        let elevationElement = elementWithTitleSummit.nextElementSibling;
-        const elevation = elevationElement.textContent;
-        console.log('Elevation:', elevation);
-        */
-
-        // Print the extracted information
-        //console.log('(Top) Description:', topDescription);
-        //console.log('Main Image URL:', mainImageUrl);
-
-        console.log("Successfully extracted relevant mountain information from wikipedia!")
-        return mainImageUrl, mainImageElement;
-
-    } catch(e){
-        console.log('An error occurred in 3:', e);
-    }
+    });
 }

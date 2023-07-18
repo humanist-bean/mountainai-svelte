@@ -83,6 +83,10 @@
         <button transition:slide  on:click={() => signInWrapper(auth)} class="mtn-auth-btn" id="upload">
             Sign In
         </button>
+        <br/><br/>
+        <div><h2>Click "Sign In" to Sign in/up with an existing google account</h2></div>
+        
+        
     {/if}
 </div>
 
@@ -98,6 +102,13 @@
 
     div > a {
         text-decoration: none;
+    }
+
+    div > h2 {
+        color: white;
+        background-color: black;
+        background: rgba(1, 0, 0, .5);
+        font-size: 0.9rem;
     }
 
     .mtn-auth-btn{

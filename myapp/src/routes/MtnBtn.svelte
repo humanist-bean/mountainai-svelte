@@ -1,8 +1,9 @@
 <script>
     import {createEventDispatcher} from 'svelte';
-    import {addDoc, collection, serverTimestamp} from 'firebase/firestore';
+    import { goto } from '$app/navigation';
     import {user_store} from '$lib/js/user.js';
-    import {uploadPhoto} from '$lib/js/firebase.js';
+    import {prediction_store} from '$lib/js/prediction.js';
+    import {uploadPhoto, makePrediction} from '$lib/js/firebase.js';
 
 
     const dispatch = createEventDispatcher();
@@ -18,37 +19,39 @@
         user_id = "0";
     }
 
-    function uploadedFile(){
-        dispatch('uploaded-file');
+    function finishedFileUploads(){
+        //dispatch('uploaded-file');
+        goto("/result");
     }
 
     // Code For Image Upload on Button Click 
 
     let files;
-
+    // Get Prediction and set prediction store with File and Upload it to firebase if user signed in
     $: if (files && files[0]) {
         console.log(files[0].name);
-        uploadPhoto(files[0], loggedIn, user_id);
+        // Make Prediction with MountainAI REST API
+        makePrediction(files[0]).then( (predictionData) => {
+            prediction_store.set(predictionData);
+        }).catch((error) => console.log("There was an error making the prediction: ",error));
+
+        // If user is logged in save uploaded Photo and prediction results to firebase
+        // TODO: add logic to save prediction result to uploaded Photo info
+        if(loggedIn){
+            uploadPhoto(files[0], loggedIn, user_id);
+        }
+
         files = null;
-        uploadedFile();
+        finishedFileUploads();
     }
 
 </script>
 
 <div>
-    <!-- COMMENTED OUT SO WE CAN USE PLACEHOLDER BUTTON UNTIL BACKEND IS IMPLEMENTED
-    <input type="file" id="upload" hidden/>
-	<label for="upload">Choose file</label>  
-    
-    <button on:click={()=>{onClick(); clickedUploadBtn();}} class="mtn-upload-btn" id="upload">
-        Choose File
-    
-    
-    </button> -->
     <form class="mtn-upload-btn" method="POST">
         <label>
             Choose File
-            <input class="hidden-input" name="mtn-img" bind:files id="upload" on:change={uploadedFile} type="file" hidden/>
+            <input class="hidden-input" name="mtn-img" bind:files id="upload" type="file" accept="image/*" hidden/>
         </label>
     </form>
 </div>
@@ -58,8 +61,8 @@
         background-color: black;
         font-family: sans-serif;
         border-radius: 0.7rem;
-        cursor: pointer;
-        display: flex;
+        /*display: flex; */
+        width: fit-content;
         color: white;
         text-align: center;
         padding: 0.66rem;

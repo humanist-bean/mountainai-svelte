@@ -32,7 +32,7 @@
 {#if intro_transition_ready}
 	<div transition:fade class="app">
 		{#if (toggle_header && transition_ready)}
-			<Header />
+			<Header/>
 		{/if}
 
 		<main>

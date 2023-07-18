@@ -19,12 +19,13 @@
 </article>
 
 <style>
-
+    /* hsl(07 100% 62%), 
+            hsl(182 100% 59%) */
     article {
         background: linear-gradient(
             to right, 
-            hsl(07 100% 62%), 
-            hsl(182 100% 59%)
+            rgb(55, 122, 78), 
+            rgb(5, 2, 49)
         );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
