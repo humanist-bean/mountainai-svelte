@@ -32,13 +32,15 @@
         filePromise.then((file) => {
             // file is the resolved value from the createFileFromImageUrl Promise
             if (file) {
+                prediction_store.set(false);
+                goto("/result"); // helps avoid user clicking 'View Prediction Results' too much
             // Make Prediction with MountainAI REST API
-            makePrediction(file)
-                .then((predictionData) => {
-                    prediction_store.set(predictionData);
-                    goto("/result");
-                })
-                .catch((error) => console.log("There was an error making the prediction: ", error));
+                makePrediction(file)
+                    .then((predictionData) => {
+                        prediction_store.set(predictionData);
+                        
+                    })
+                    .catch((error) => console.log("There was an error making the prediction: ", error));
             } else {
             // Handle the case where filePromise was rejected (error occurred in createFileFromImageUrl)
             console.log("Failed to create file from image URL.");
