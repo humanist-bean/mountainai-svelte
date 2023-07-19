@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp, deleteDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { getStorage, deleteObject, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -33,7 +33,7 @@ export const storage = getStorage(app);
 
 //Uploads photo to firebase and sends it to MountainAI
 //pass in individual image file, e.g. 'uploadPhoto(files[0])'
-export async function uploadPhoto(file, loggedIn, user_id) {
+export async function uploadPhoto(file, loggedIn, user_id, uploads_cache_id) {
 
   // Store image and image details in firebase
   // Set up the image data in json form
@@ -47,19 +47,16 @@ export async function uploadPhoto(file, loggedIn, user_id) {
     createdAt: serverTimestamp(),
     verifiedInput: false,
     verifiedResult: false,
-    uid: user_id
+    uid: user_id,
+    predictionCacheId: uploads_cache_id
   };
   
   if (loggedIn) {
     console.log(`User is logged in so send ${file.name} data to firestore's upload history`);
     try {
-      // Upload the image to firebase storage and get image URL
-      // TODO: get image url and set img_data.imageURL.
-      
-      uploadSearchPhotoToFirebase(file, img_data);
-      // Upload the image details to firestore
-      //const docRef = await addDoc(collection(db, "uploaded-images"), img_data);
-      //console.log("Document written with ID: ", docRef.id);
+      // Upload the image to firebase storage and image data to firestore
+      await uploadSearchPhotoToFirebase(file, img_data);
+      return Promise.resolve(true);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -157,32 +154,6 @@ export async function deleteUpload(upload){
   });
 }
 
-export async function makePrediction(file){
-    // POST file to MountainAI REST API (Flask) for prediction
-    console.log(`Attempting to send ${file.name} image to mountainAI for evaluation`);
-    try{
-      //const reader = new FileReader();
-      // Create a FormData object and append the file to it
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      // Local URL: http://127.0.0.1:5000/predict
-      // Google App Engine URL: https://mountainai-392023.wl.r.appspot.com/predict
-      // ngrok PORT Tunneling URL to host from local PC (NOTE: This changes with each ngrok http run): 
-      // https://7a31-2601-1c0-cc00-4840-86d-f509-d9c-2df1.ngrok-free.app/predict
-      const response = await fetch('https://d8b7-2601-1c0-cc00-4840-86d-f509-d9c-2df1.ngrok-free.app/predict', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await response.json();
-      console.log("Successfully sent Image to MountainAI and got response: ", data);
-      return data;
-    } catch (e) {
-      console.error("Error sending image to MountainAI Server for prediction: ", e);
-    }
-
-}
-
 // Function to cache wikipedia info by sending it to firestore 
 // so we can load mountain results faster 
 // NOTE: COOL USE CASE OF CLIENT SIDE WEB SCRAPING!!!
@@ -209,8 +180,8 @@ export async function uploadWikiInfoToFirestore(predict_result, wiki_img_url, wi
 // Returns: wiki_img_url, wiki_top_text
 // Usage: check if return values are false, if so scrape wiki, if not display them
 export async function getWikiCache(mtn_name){
-  const user_uploads_query = query(collection(db, "wiki-cache"), where("predictionMtnName", "==", mtn_name));
-  const querySnapshot = await getDocs(user_uploads_query);
+  const wikiCacheQuery = query(collection(db, "wiki-cache"), where("predictionMtnName", "==", mtn_name));
+  const querySnapshot = await getDocs(wikiCacheQuery);
   // Return an array of the docs in the collection
   if(querySnapshot.docs.length > 0){
     console.log("Found wiki info in firestore cache, returning in Promise.");
@@ -243,6 +214,61 @@ export async function getWikiCache(mtn_name){
   }
 
 }
+
+// Cache Prediction Results to Uploaded Image in firestore For quick future lookup from dashboard
+// Should be called IF user is logged in and uploads a picture for analysis
+export async function cachePredictionResults(prediction_cache_id, prediction_results, user_id){
+  console.log(`Attempting to cache prediction results to users upload using prediction_cache_id: \
+  ${prediction_cache_id} and prediction_results: ${prediction_results} `);
+  const userUploadsQuery = query(collection(db, "uploaded-images"), where("predictionCacheId", "==", prediction_cache_id));
+  const querySnapshot = await getDocs(userUploadsQuery);  
+  console.log("TEST - length of docs is: ", querySnapshot.docs.length);
+  const docId = querySnapshot.docs[0].id;
+  console.log("TEST: here is document 0's docID: ", docId);
+  const uploadRef = doc(db, "uploaded-images", querySnapshot.docs[0].id);
+  try{
+    await updateDoc(uploadRef, {
+      predictionResults: prediction_results,
+    });
+    console.log("Successfully cached Prediction Results to upload data on firestore!")
+  }catch(e){
+    console.log('An error occurred in cachePredictionREsults while updating upload doc:', e);
+    reject(e);
+}
+  
+}
+
+// Returns Promise That resolves with Cached Prediction Data 
+export async function getPredictionCache(prediction_cache_id){
+  console.log("Attempting to retrieve upload's cached prediction results from firestore");
+  console.log("TEST: ", prediction_cache_id);
+  const userUploadsQuery = query(collection(db, "uploaded-images"), where("predictionCacheId", "==", prediction_cache_id));
+  const querySnapshot = await getDocs(userUploadsQuery);
+  // Return an array of the docs in the collection
+  if(querySnapshot.docs.length > 0){
+    console.log("Found prediction info in firestore cache, returning in Promise.");
+    const predictionCache = await querySnapshot.docs[0].data().predictionResults;
+    return new Promise((resolve, reject) =>{
+        try{
+            resolve(predictionCache);
+        } catch(e){
+            console.log('An error occurred in getWikiCache:', e);
+            reject(e);
+        }
+    });
+  } else {
+    console.log("Didn't find prediction info in Firestore uploaded-images, returning promise that resolves to false.")
+    return new Promise((resolve, reject) =>{
+      try{
+          resolve(false);
+      } catch(e){
+          console.log('An error occurred in getPredictionCache:', e);
+          reject(e);
+      }
+    });
+  }
+}
+
 
 // NOTE: analytics causes a "can't find window" error, protecting with 'if window' for now
 // source: https://stackoverflow.com/questions/69799682/firebase-analytics-with-next-js-window-not-defined

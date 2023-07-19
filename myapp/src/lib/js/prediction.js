@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 
-export const prediction_store = writable(false);
+export const prediction_store = writable(false); //store for prediction results
+export const prediction_cache_id = writable(false); // store for storage cache id to cache prediction to uploaded-images
 
 export async function createFileFromImageUrl(imageUrl, fileName) {
     try {
@@ -15,4 +16,43 @@ export async function createFileFromImageUrl(imageUrl, fileName) {
       console.error('Error creating file from image URL:', error);
       return null;
     }
+
+
   }
+
+// Get Prediction from MountainAI model by making POST call to Flask REST API
+export async function makePrediction(file){
+  // POST file to MountainAI REST API (Flask) for prediction
+  console.log(`Attempting to send ${file.name} image to mountainAI for evaluation`);
+  try{
+    //const reader = new FileReader();
+    // Create a FormData object and append the file to it
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    // Local URL: http://127.0.0.1:5000/predict
+    // Google App Engine URL: https://mountainai-392023.wl.r.appspot.com/predict
+    // ngrok PORT Tunneling URL to host from local PC (NOTE: This changes with each ngrok http run): 
+    // https://7a31-2601-1c0-cc00-4840-86d-f509-d9c-2df1.ngrok-free.app/predict
+    const response = await fetch('https://d8b7-2601-1c0-cc00-4840-86d-f509-d9c-2df1.ngrok-free.app/predict', {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await response.json();
+    console.log("Successfully sent Image to MountainAI and got response: ", data);
+    return data;
+  } catch (e) {
+    console.error("Error sending image to MountainAI Server for prediction: ", e);
+  }
+
+}
+
+export function getPredictionCacheId(){
+  const max = 1000000000000;
+  const min = 1;
+  return Math.floor(Math.random() * (max - min) ) + min;
+}
+
+
+
+// Save prediction results to uploaded-images and Get (Should go here or firebase.js?)

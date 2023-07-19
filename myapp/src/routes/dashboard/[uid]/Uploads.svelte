@@ -1,7 +1,7 @@
 <script>
-    import {getUploads, db, deleteUpload} from '$lib/js/firebase';
+    import {getUploads, db, deleteUpload, getPredictionCache} from '$lib/js/firebase';
     import {prediction_store, createFileFromImageUrl} from '$lib/js/prediction.js';
-    import {makePrediction} from '$lib/js/firebase.js';
+    import {makePrediction} from '$lib/js/prediction.js';
     import {onSnapshot, query, collection, where} from 'firebase/firestore';
 	import { onMount, onDestroy } from 'svelte';
     import { fade } from 'svelte/transition';
@@ -25,6 +25,35 @@
     onDestroy(()=>{unsub();});
 
     function viewPrediction(upload) {
+        // helps avoid user clicking 'View Prediction Results' too much
+        prediction_store.set(false);
+        goto("/result");
+        if(!upload.data().predictionCacheId){
+            console.log("No predictionId on upload, making prediction instead of getting it from cache");
+            backwardsCompatMakePrediction(upload);
+            return;
+        }
+        getPredictionCache(upload.data().predictionCacheId).then( (cachedPrediction) =>{
+            // Check upload for cached predictionResults, they don't exist for old uploads
+            // if it doesn't exist make prediction manually to maintain backwards compatibility
+            if (cachedPrediction == false){
+                console.log("cachedPrediction was False for some reason, attempting to make manual prediction instead.")
+                backwardsCompatMakePrediction(upload);
+                return;
+            }
+             
+            //set prediction store with prediction results
+            prediction_store.set(cachedPrediction);
+
+        }).catch((error) => {
+            console.log("Error getting prediction results from cache in viewPrediction: ", error);
+        });
+
+    }
+
+    // This function is for making a prediction if we can't find one cached for the uploads,
+    // eventually I want to remove this but I don't want to break anyone's existing dashboard yet
+    function backwardsCompatMakePrediction(upload){
         // Create a Promise to handle the asynchronous operation
         const filePromise = createFileFromImageUrl(upload.data().imageURL, upload.data().uploadName);
 
@@ -34,7 +63,10 @@
             if (file) {
                 prediction_store.set(false);
                 goto("/result"); // helps avoid user clicking 'View Prediction Results' too much
-            // Make Prediction with MountainAI REST API
+                 
+
+                // REMOVE BELOW - SHOULD HAVE UPLOAD PREDICTION RESULTS CACHED
+                // Make Prediction with MountainAI REST API
                 makePrediction(file)
                     .then((predictionData) => {
                         prediction_store.set(predictionData);
