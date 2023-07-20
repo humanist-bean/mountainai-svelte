@@ -108,7 +108,8 @@ async function extractMtnInfo(htmlContent) {
 
         } catch(e){
             console.log('An error occurred in 3:', e);
-            reject(e);
+            reject(Error("The following error occured retrieving this image's \
+             wikipedia data. Try again with another mountain image! Error: " + e)); //reject(e);
         }
     });
 }
