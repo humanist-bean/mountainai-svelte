@@ -68,7 +68,7 @@
     {/await}
 {:else}
     <div transition:fade>
-       <h1> ... Waiting for Prediction Result, if waiting longer than 1min select new file ...</h1>
+       <h1> ... Waiting for Prediction Result, if waiting longer than 1min select new file or try smaller image size ... </h1>
     </div>
 {/if}
 

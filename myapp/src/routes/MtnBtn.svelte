@@ -17,41 +17,60 @@
 
 
     // Code For Image Upload on Button Click 
-    let files;
+    let files; 
     // Get Prediction and set prediction store with File and Upload it to firebase if user signed in
+    
     $: if (files && files[0]) {
-        console.log(`Uploaded file for prediction: ${files[0].name}`);
-        prediction_store.set(false); // Makes it so 'Waiting for prediciton' shows in /result
-        prediction_cache_id.set(false);
-        goto('/result'); // redirect user to avoid them clicking choose file fast repeatedly 
-        
-        // Make Prediction with MountainAI REST API
-        makePrediction(files[0]).then( (predictionPromise) => {
-            Promise.resolve(predictionPromise).then((predictionData) => {
-                prediction_store.set(predictionData);
-            }).catch((error) => console.log("There was an error setting the prediction_store: ",error));    
-        }).catch((error) => console.log("There was an error making the prediction: ",error));
+        try{
+            // Check if file size is too large, if so raise Alert and cancel upload
+            const maxFileSizeInBytes = 1 * 1024 * 1024; // 1mb
+            const fileSize = files[0].size;
+            if (fileSize > maxFileSizeInBytes) {
+                alert("File size exceeds the allowed limit. Please select a smaller file.");
+                // Clear the file input field
+                files = null;
+                // Prevent form submission
+                throw "File size exceeds limit.";
+            }
 
-        // If user is logged in save uploaded Photo and prediction results to firebase
-        // TODO: add logic to save prediction result to uploaded Photo info
-        if(loggedIn){
-            //Setup prediction_cache_id so it can be passed to the firebase storage for later lookup
-            const uploads_cache_id = getPredictionCacheId();
-            console.log("Generated prediction cache id for upload: ", uploads_cache_id);
-            uploadPhoto(files[0], loggedIn, user_id, uploads_cache_id).then((promise)=>{
-                Promise.resolve(promise).then((resolved)=>{
-                    if (resolved){
-                        console.log("Upload Photo promise resolved, attempting to set prediction_cache_id..");
-                        prediction_cache_id.set(uploads_cache_id); // triggers cachePredictionResults call
-                    } else {
-                        console.log("WEIRD: The promise resolved to false for some reason...");
-                    }
+            //Continue with file upload and prediction
+            console.log(`Uploaded file for prediction: ${files[0].name}`);
+            prediction_store.set(false); // Makes it so 'Waiting for prediciton' shows in /result
+            prediction_cache_id.set(false);
+            goto('/result'); // redirect user to avoid them clicking choose file fast repeatedly 
+            
+            // Make Prediction with MountainAI REST API
+            makePrediction(files[0]).then( (predictionPromise) => {
+                Promise.resolve(predictionPromise).then((predictionData) => {
+                    prediction_store.set(predictionData);
+                }).catch((error) => console.log("There was an error setting the prediction_store: ",error));    
+            }).catch((error) => console.log("There was an error making the prediction: ",error));
+
+            // If user is logged in save uploaded Photo and prediction results to firebase
+            // TODO: add logic to save prediction result to uploaded Photo info
+            if(loggedIn){
+                //Setup prediction_cache_id so it can be passed to the firebase storage for later lookup
+                const uploads_cache_id = getPredictionCacheId();
+                console.log("Generated prediction cache id for upload: ", uploads_cache_id);
+                uploadPhoto(files[0], loggedIn, user_id, uploads_cache_id).then((promise)=>{
+                    Promise.resolve(promise).then((resolved)=>{
+                        if (resolved){
+                            console.log("Upload Photo promise resolved, attempting to set prediction_cache_id..");
+                            prediction_cache_id.set(uploads_cache_id); // triggers cachePredictionResults call
+                        } else {
+                            console.log("WEIRD: The promise resolved to false for some reason...");
+                        }
+                    });
                 });
-            });
+            }
+
+            files = null;
+        } catch (error) {
+            console.log("An error occurred in 'if files[0]': ", error);
         }
 
-        files = null;
     }
+    
 
     // Cache prediction results by adding them to uploaded-images doc for quick lookup from dashboard
     $: if (loggedIn && $prediction_cache_id && $prediction_store){

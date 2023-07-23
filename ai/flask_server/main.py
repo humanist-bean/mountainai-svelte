@@ -4,19 +4,21 @@ from PIL import Image
 from fastai.vision.all import *
 from fastai.vision.widgets import *
 
-"""SETUP PATHLIB SPECIFICALLY FOR WINDOWS DEPLOYMENT
+"""SETUP PATHLIB SPECIFICALLY FOR WINDOWS DEPLOYMENT """
 import pathlib
 
 plt = platform.system()
-if plt == 'Linux': pathlib.WindowsPath = pathlib.PosixPath"""
+if plt == 'Linux': pathlib.WindowsPath = pathlib.PosixPath
 
 
 """FASTAI SETUP"""
 
 class Predict:
     def __init__(self, filename):
+        plt_path = pathlib.Path(filename) # This line and line below to fix GAE path problem
+        self.learn_inference = load_learner(plt_path)
         #self.learn_inference = load_learner(Path()/filename)
-        self.learn_inference = load_learner("./%s"%(filename))
+        #self.learn_inference = load_learner("./%s"%(filename))
 
 
 
@@ -53,7 +55,7 @@ model_path = 'models/model.pkl'
 print("Building Predict Class Instance")
 predictor = Predict(model_path)
 
-classes_path = 'predict_classes/'
+#classes_path = 'predict_classes/'
 
 #Basic Flask REST API Setup - Starts running app and serving /predict POST 
 print("Starting flask app")
@@ -70,4 +72,4 @@ def predict():
 print("Flask app started, serving app POST method '/predict' ")
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=8080)

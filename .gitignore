@@ -1,3 +1,16 @@
 ai/flask_server/models/
 ai/img_wrangling/images/
 ai/img_wrangling/models/
+myapp/.firebase/
+myapp/node_modules/
+myapp/static/
+myapp/.DS_Store/
+myapp/.svelte-kit/
+/package/
+myapp/.env
+myapp/.env.*
+myapp/!.env.example
+myapp/.vercel
+myapp/.output
+myapp/vite.config.js.timestamp-*
+myapp/vite.config.ts.timestamp-*
