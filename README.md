@@ -24,7 +24,7 @@ with the best images for training.
 
  - Mountain Prediction Result and Client Side Wikipedia API/Scraping with Caching: The AI model only outputs a list of probabilities and the class name of the top prediction, so to get summaries of all the mountains I use the wikipedia API and javascript to extract the main wikipedia mountain image and description. I also cache this information in FireStore so it can be retrieved faster in the future, special thanks to Cody Anderson for this idea! I also added some code to cache upload prediction results so users' can quickly see their old prediction results when they click on an upload in their dashboard without wasting compute resources on redundent AI model inferences. Relevant File Paths: "mountainai-svelte/myapp/src/lib/js/firebase.js", "mountainai-svelte/myapp/src/lib/js/wiki.js", "mountainai-svelte/myapp/src/routes/MtnBtn.svelte" "mountainai-svelte/myapp/src/routes/result/MainMountain.svelte", "mountainai-svelte/myapp/src/lib/js/prediction.js"
 
- - Deployment: I deployed the flask server that serves the FastAI model to google app engine, and the SvelteKit site to firebase. NOTE: I'm running into trouble with the google app engine Flask Server, so I'm using ngrok to serve the prediction REST API for now.
+ - Deployment: I deployed the flask server that serves the FastAI model to google app engine, and the SvelteKit site to firebase. Easier said than done...
  
  - Docker: I used a docker container with google app engine to deploy my app
 
