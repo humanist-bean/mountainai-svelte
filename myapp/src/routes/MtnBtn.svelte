@@ -83,7 +83,7 @@
 
 <div>
     <form class="mtn-upload-btn" method="POST">
-        <label>
+        <label class="btn-label-hack-fix">
             Choose File
             <input class="hidden-input" name="mtn-img" bind:files id="upload" type="file" accept="image/*" hidden/>
         </label>
@@ -91,7 +91,8 @@
 </div>
 
 <style>
-    /* TODO: FIX THIS STUPID BUTTON IT ONLY WORKS IF YOU CLICK ON THE TEXT WITHIN IT */
+    /* NOTE: .mtn-upload-btn is sensitive and its padding/margins are effected by 
+    .btn-label-hack-fix */
     .mtn-upload-btn{
         background-color: black;
         font-family: sans-serif;
@@ -100,9 +101,10 @@
         width: fit-content;
         color: white;
         text-align: center;
-        padding: 0.66rem;
+        padding: 0.0rem;
         margin: 0.66rem;
         text-decoration: none;
+        display: flex;
     }
 
     
@@ -112,6 +114,16 @@
 
     .hidden-input{
         height:100%;
+    }
+
+    /* This label controls the clicable part of the button that brings up the file selection window.
+     For some reason, this button is working weird. Not sure if its due to Sveltekit
+     or some css weirdness in a parent component, but neither stackoverflow or chatGPT has
+     any good answer for why this label makes the "<input bind:files>" while other methods
+     such as onclick functions don't. NOTE: padding here controls upload button size! */
+    .btn-label-hack-fix{
+        padding:0.66rem;
+        cursor: pointer;
     }
 
 

@@ -122,7 +122,8 @@
         padding: 0.66rem;
         margin: 0.66rem;
         text-decoration: none;
-        outline: 0.2rem solid black;
+        /* outline: 0.2rem solid black; MAKES SQUARE OUTLINE ON SAFARI */
+        box-shadow: 0 0 0 0.2rem black; /* WORKS ON SAFARI */
     }
 
     .mtn-auth-btn:hover{
