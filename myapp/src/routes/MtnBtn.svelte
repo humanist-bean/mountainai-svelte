@@ -126,5 +126,11 @@
         cursor: pointer;
     }
 
+    @media (max-width: 400px) {
+        .mtn-upload-btn{
+            font-size: .5rem;
+        }
+    }
+
 
 </style>

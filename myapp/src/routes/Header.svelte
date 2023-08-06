@@ -42,13 +42,18 @@ on:outroend={transition_end}>
 </header>
 
 <style>
+	header {
+		width: 100%;
+	}
+
 	ul {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	background-color: #333;
-	opacity: 0.5;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		background-color: #333;
+		opacity: 0.5;
+		width: 100%;
 	}
 
 	li {
@@ -65,7 +70,7 @@ on:outroend={transition_end}>
 	}
 
 	li a:hover {
-	background-color: #111;
+		background-color: #111;
 	}
 
 	ul .left-corner{
@@ -88,12 +93,23 @@ on:outroend={transition_end}>
         margin: 0.66rem;
         text-decoration: none;
 		color: white;
+		cursor: pointer;
     }
 
     
     .dashboard-btn:hover{
         background-color: blue;
 		text-decoration: none;
+    }
+
+	@media (max-width: 400px) {
+        .dashboard-btn{
+			font-size: .5rem;
+		}
+
+		.home-btn{
+			font-size: .5rem;
+		}
     }
 
 </style>

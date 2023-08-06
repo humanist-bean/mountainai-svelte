@@ -17,3 +17,16 @@
         <Uploads uid={data.uid} />
     </div>
 {/if}
+
+<style>
+    div > h1 {
+        font-weight: bold;
+    }
+    
+    @media (max-width: 400px) {
+        div > h1 {
+            font-size: 1.3rem;
+
+        }
+    }
+</style>

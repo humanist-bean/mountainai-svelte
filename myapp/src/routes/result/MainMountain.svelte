@@ -68,7 +68,7 @@
     {/await}
 {:else}
     <div transition:fade>
-       <h1> ... Waiting for Prediction Result, if waiting longer than 1min select new file or try smaller image size ... </h1>
+       <h3> ... Waiting for Prediction Result, if waiting longer than 1min select new file or try smaller image size ... </h3>
     </div>
 {/if}
 
@@ -109,7 +109,7 @@
         width: fit-content;
         height: fit-content;
         text-align: center;
-        resize: none;
+        /* resize: none; */
     }
 
     .flex-container > div > p {
@@ -127,5 +127,36 @@
     .top-mountain-image{
         height: 22rem;
         width: auto;
+    }
+
+    @media (max-width: 400px) {
+        div > h3{
+            font-size: .75rem;
+        }
+
+        p {
+            font-size: .75rem;
+        }
+        
+        .prediction-container > h1{
+            font-size: .75rem;
+        }
+        .top-mountain-image{
+            height:5rem;
+        }
+
+        .flex-container > div {
+            size: 3rem;
+            min-height: 3rem;
+        }
+
+        .flex-container{
+            flex-direction: column;
+            font-size: .5rem;
+        }
+
+        .scroll-overflow{
+            max-height: 10rem;
+        }
     }
 </style>

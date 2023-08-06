@@ -12,7 +12,7 @@
 {#if intro_transition_ready}
     <div transition:fade class="app">
         <MainMountain />
-        <h3 style="color:black;">Coming soon: List of top N guesses after top result, placeholder for now...</h3>
+        <h3 style="color:black; font-size: 0.75rem;">Coming soon: List of top N guesses after top result, placeholder for now...</h3>
         <MountainList/>
     </div>
 {/if}

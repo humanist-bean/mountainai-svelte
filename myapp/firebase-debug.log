@@ -1,0 +1,66 @@
+[debug] [2023-08-05T03:14:21.564Z] ----------------------------------------------------------------------
+[debug] [2023-08-05T03:14:21.566Z] Command:       /usr/local/bin/firebase /Users/alderfrench/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase deploy
+[debug] [2023-08-05T03:14:21.566Z] CLI Version:   12.4.7
+[debug] [2023-08-05T03:14:21.567Z] Platform:      darwin
+[debug] [2023-08-05T03:14:21.567Z] Node Version:  v16.16.0
+[debug] [2023-08-05T03:14:21.568Z] Time:          Fri Aug 04 2023 20:14:21 GMT-0700 (Pacific Daylight Time)
+[debug] [2023-08-05T03:14:21.568Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-08-05T03:14:21.648Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-08-05T03:14:21.649Z] > authorizing via signed-in user (alderfrench1@gmail.com)
+[debug] [2023-08-05T03:14:21.649Z] [iam] checking project mountainai for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-08-05T03:14:21.651Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/mountainai:testIamPermissions [none]
+[debug] [2023-08-05T03:14:21.652Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/mountainai:testIamPermissions x-goog-quota-user=projects/mountainai
+[debug] [2023-08-05T03:14:21.652Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/mountainai:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-08-05T03:14:21.817Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/mountainai:testIamPermissions 200
+[debug] [2023-08-05T03:14:21.817Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/mountainai:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-08-05T03:14:21.819Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/mountainai [none]
+[debug] [2023-08-05T03:14:22.009Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/mountainai 200
+[debug] [2023-08-05T03:14:22.010Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/mountainai {"projectId":"mountainai","projectNumber":"272961028532","displayName":"mountainai","name":"projects/mountainai","resources":{"hostingSite":"mountainai","realtimeDatabaseInstance":"mountainai-default-rtdb","storageBucket":"mountainai.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_131e02e7-c9cc-41af-b93c-67f147b1b833"}
+[info] 
+   Thank you for trying our experimental support for Svelte on Firebase Hosting.
+   While this integration is maintained by Googlers it is not a supported Firebase product.
+   Issues filed on GitHub will be addressed on a best-effort basis by maintainers and other community members.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/frameworks-overview
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2023-08-05T03:14:36.200Z] Error: ENOENT: no such file or directory, lstat '/Users/alderfrench/Desktop/mountainai-svelte/myapp/Users/alderfrench/Desktop/mountainai-svelte/myapp/.svelte-kit/output/server'
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-08-05T03:43:59.830Z] ----------------------------------------------------------------------
+[debug] [2023-08-05T03:43:59.832Z] Command:       /usr/local/bin/firebase /Users/alderfrench/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase deploy
+[debug] [2023-08-05T03:43:59.832Z] CLI Version:   12.4.7
+[debug] [2023-08-05T03:43:59.832Z] Platform:      darwin
+[debug] [2023-08-05T03:43:59.833Z] Node Version:  v16.16.0
+[debug] [2023-08-05T03:43:59.843Z] Time:          Fri Aug 04 2023 20:43:59 GMT-0700 (Pacific Daylight Time)
+[debug] [2023-08-05T03:43:59.843Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-08-05T03:43:59.929Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-08-05T03:43:59.930Z] > authorizing via signed-in user (alderfrench1@gmail.com)
+[debug] [2023-08-05T03:43:59.930Z] [iam] checking project mountainai for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-08-05T03:43:59.934Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/mountainai:testIamPermissions [none]
+[debug] [2023-08-05T03:43:59.934Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/mountainai:testIamPermissions x-goog-quota-user=projects/mountainai
+[debug] [2023-08-05T03:43:59.935Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/mountainai:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-08-05T03:44:00.193Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/mountainai:testIamPermissions 200
+[debug] [2023-08-05T03:44:00.193Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/mountainai:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-08-05T03:44:00.194Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/mountainai [none]
+[debug] [2023-08-05T03:44:00.455Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/mountainai 200
+[debug] [2023-08-05T03:44:00.455Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/mountainai {"projectId":"mountainai","projectNumber":"272961028532","displayName":"mountainai","name":"projects/mountainai","resources":{"hostingSite":"mountainai","realtimeDatabaseInstance":"mountainai-default-rtdb","storageBucket":"mountainai.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_131e02e7-c9cc-41af-b93c-67f147b1b833"}
+[info] 
+   Thank you for trying our experimental support for Svelte on Firebase Hosting.
+   While this integration is maintained by Googlers it is not a supported Firebase product.
+   Issues filed on GitHub will be addressed on a best-effort basis by maintainers and other community members.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/frameworks-overview
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2023-08-05T03:44:13.628Z] Error: ENOENT: no such file or directory, lstat '/Users/alderfrench/Desktop/mountainai-svelte/myapp/Users/alderfrench/Desktop/mountainai-svelte/myapp/.svelte-kit/output/server'
+[error] 
+[error] Error: An unexpected error has occurred.

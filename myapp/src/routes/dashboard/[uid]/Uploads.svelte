@@ -133,4 +133,10 @@
 button {
     margin:10px;
 }
+
+@media (max-width: 400px) {
+        .flex-container > div > img{
+            max-width: 10rem;
+        }
+    }
 </style>

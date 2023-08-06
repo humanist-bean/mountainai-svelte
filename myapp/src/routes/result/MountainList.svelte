@@ -38,7 +38,7 @@ let mountains = ['Mt. Rainier', 'Mt. Thielsen', 'Diamond Peak', 'Mt. Hood', 'Mt.
         width: fit-content;
         height: fit-content;
         text-align: center;
-        resize: none;
+        /* resize: none; */
         flex-direction: row;
         justify-content: space-between;
     }
@@ -50,6 +50,23 @@ let mountains = ['Mt. Rainier', 'Mt. Thielsen', 'Diamond Peak', 'Mt. Hood', 'Mt.
     .list-flex-container > div > img {
         height: 5rem;
         width: auto;
+    }
+
+    @media (max-width: 400px) {
+
+        .list-flex-container {
+         min-width: 4rem;
+        }
+
+        .list-flex-container > div > h3 {
+        font-size: .5rem;
+        }
+
+        .list-flex-container > div > img {
+            height: 2rem;
+            width: auto;
+            padding: .2rem;
+        }
     }
 
 </style>

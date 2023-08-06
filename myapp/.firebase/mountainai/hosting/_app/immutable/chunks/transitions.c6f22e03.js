@@ -1,1 +1,0 @@
-import{w as n}from"./index.9eb50c3c.js";const t=n(!0);function s(){console.log("transition_end fired"),t.set(!0)}function i(){console.log("transition_start fired"),t.set(!1)}export{s as a,t as b,i as t};
