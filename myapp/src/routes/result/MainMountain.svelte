@@ -96,6 +96,8 @@
         background: rgba(1, 0, 0, .15);
         width: fit-content;
         height: fit-content;
+        justify-content: center;
+        align-items: center;
     }
 
     .flex-container > div {
