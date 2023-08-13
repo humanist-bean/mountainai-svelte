@@ -32,13 +32,16 @@
         return Promise.reject(new Error("Prediction store is undefined"));
     }
     }
-
+    // Reactive block that call fetchWikiData() after prediction_store is set with the prediction results
     let promise;
     $: { 
         if($prediction_store){
         promise = fetchWikiData();
         }
     }
+
+    // Alert user when waiting too long for prediction results, usually because GCP instance is booting
+    const wait = () => new Promise((res) => setTimeout(res , 7000))
 
 </script>
 {#if $prediction_store}
@@ -68,7 +71,14 @@
     {/await}
 {:else}
     <div transition:fade>
-       <h3> ... Waiting for Prediction Result, if waiting longer than 1min select new file or try smaller image size ... </h3>
+       {#await wait()}
+       <h3> ... Waiting for Prediction Result ... </h3>
+        {:then a}
+        <h3> ... Taking a while? That's probably because my google app instance that runs AI inference is booting
+            because I can't afford to keep it running constantly. I'm afraid this can take up to 5-10 minutes, but if you
+            leave this page open you should see your result eventually. If not, try again with a smaller image size...
+        </h3>
+        {/await}
     </div>
 {/if}
 
