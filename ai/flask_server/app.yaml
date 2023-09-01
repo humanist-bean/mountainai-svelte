@@ -6,8 +6,8 @@ resources:
   disk_size_gb: 30
 
 automatic_scaling:
-  min_num_instances: 3
-  max_num_instances: 20
+  min_num_instances: 1
+  max_num_instances: 5
 
 entrypoint: gunicorn -b :$PORT -k uvicorn.workers.UvicornWorker --timeout 1500 main:app
 
