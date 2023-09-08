@@ -62,12 +62,12 @@ export async function getWikiInfoFromName(name){
 // Returns: mainImageUrl, extractedText
 async function extractMtnInfo(htmlContent) {
     return new Promise((resolve, reject) => {
+        // Assuming you have retrieved the HTML content of the Wikipedia page and stored it in a variable 'htmlContent'
+        // Step A: Create a DOM Element
+        const tempElement = document.createElement('div');
+        tempElement.innerHTML = htmlContent;
         try{
-            // Assuming you have retrieved the HTML content of the Wikipedia page and stored it in a variable 'htmlContent'
-            // Step A: Create a DOM Element
-            const tempElement = document.createElement('div');
-            tempElement.innerHTML = htmlContent;
-
+            
             // Step B: Locate the Summary Box
             const summaryBox = tempElement.querySelector('.infobox');
 
@@ -107,9 +107,26 @@ async function extractMtnInfo(htmlContent) {
             resolve({ mainImageUrl, extractedText });
 
         } catch(e){
+            // TRY TO HANDLE ERROR FOR CASE WITH MULTIPLE RESULTS OF SAME NAME
+            let results = handleMultipleNameResultError(tempElement);
+            resolve(results);
             console.log('An error occurred in 3:', e);
             reject(Error("The following error occured retrieving this image's \
              wikipedia data. Try again with another mountain image! Error: " + e)); //reject(e);
         }
     });
+}
+
+async function handleMultipleNameResultError(tempElement){
+    // NOTE: CURRENT STRUCTURE COULD CREATE INFINITE CALLBACK LOOP
+    // SINCE WHENEVER THERE IS AN ERROR WE CALL THIS FUNCTION WHICH
+    // CALLS THE ORIGINAL FUNCTION THAT HAD THE ERROR!
+    // handle the error by extracting the title of the result
+    // from the top page on the multiple results under same name page and
+    // use it to make a new URL to try the extraction with again 
+    console.log("Encountered multiple names error, attempting to handle")
+    const aElement = tempElement.querySelector('a');
+    console.log(aElement.title);
+    let results = await getWikiInfoFromName(aElement.title);
+    return results;
 }

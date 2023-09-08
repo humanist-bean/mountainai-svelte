@@ -7,7 +7,7 @@ resources:
 
 automatic_scaling:
   min_num_instances: 1
-  max_num_instances: 5
+  max_num_instances: 3
 
 entrypoint: gunicorn -b :$PORT -k uvicorn.workers.UvicornWorker --timeout 1500 main:app
 
