@@ -1,4 +1,7 @@
-flask==2.2.2
+gunicorn
+Cmake
+wheel
+flask
 flask-cors
 fastai
 ipywidgets

@@ -1,24 +1,14 @@
-runtime: custom
-env: flex
+runtime: python39
 instance_class: F4_1G
 
 resources:
-  disk_size_gb: 30
+  disk_size_gb: 25
 
-automatic_scaling:
-  min_num_instances: 1
-  max_num_instances: 3
+entrypoint: gunicorn -b :$PORT --timeout 1500 main:app
 
-entrypoint: gunicorn -b :$PORT -k uvicorn.workers.UvicornWorker --timeout 1500 main:app
-
-readiness_check:
-  check_interval_sec: 200
-  timeout_sec: 150
-  failure_threshold: 7
-  success_threshold: 1
-  app_start_timeout_sec: 1800
 
 handlers:
 
 - url: .*
   script: main.py
+
